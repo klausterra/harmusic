@@ -1,0 +1,226 @@
+.lesson {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.lesson__brand {
+  text-align: center;
+  animation: rise 0.7s ease both;
+}
+
+.lesson__wordmark {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 8vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  background: linear-gradient(120deg, #f4e4c1 10%, #8fd6b5 55%, #f4e4c1 90%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 8s linear infinite;
+}
+
+.lesson__tagline {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.lesson__steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.lesson__step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: left;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.lesson__step span {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: #c9b48a;
+}
+
+.lesson__step.is-current {
+  border-color: rgba(143, 214, 181, 0.45);
+  background: rgba(143, 214, 181, 0.08);
+  color: var(--ink);
+}
+
+.lesson__step.is-done {
+  color: #9fd6bb;
+}
+
+.lesson__panel {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  padding: 1.25rem 1rem 1.5rem;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 80% at 10% 0%, rgba(143, 214, 181, 0.1), transparent 55%),
+    rgba(12, 18, 16, 0.72);
+  border: 1px solid rgba(244, 228, 193, 0.08);
+  animation: rise 0.55s ease 0.08s both;
+}
+
+.lesson__panel h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 4vw, 2rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.lesson__hint {
+  margin: 0;
+  max-width: 36rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.lesson__degrees {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.degree-chip {
+  min-width: 4.2rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 14px;
+  border: 1px solid rgba(244, 228, 193, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ink);
+  display: grid;
+  gap: 0.15rem;
+  justify-items: center;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.degree-chip strong {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.degree-chip span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.degree-chip:hover,
+.degree-chip.is-active {
+  transform: translateY(-2px);
+  border-color: rgba(143, 214, 181, 0.5);
+  background: rgba(143, 214, 181, 0.12);
+}
+
+.lesson__actions,
+.lesson__build {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.lesson__slots {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  color: var(--muted);
+}
+
+.btn {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.7rem 1.15rem;
+  background: linear-gradient(135deg, #8fd6b5, #5fb892);
+  color: #0b1411;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid rgba(244, 228, 193, 0.22);
+}
+
+.lesson__feedback {
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(143, 214, 181, 0.12);
+  color: #c8f0db;
+  text-align: center;
+}
+
+.lesson__nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@media (max-width: 720px) {
+  .lesson__steps {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .lesson__step:last-child {
+    grid-column: 1 / -1;
+  }
+}

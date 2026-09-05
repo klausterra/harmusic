@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;650;700&display=swap');
+
+:root {
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Manrope', system-ui, sans-serif;
+  --ink: #f3efe6;
+  --muted: #a7b0a8;
+  --bg0: #07110e;
+  --bg1: #10201a;
+  color: var(--ink);
+  background: var(--bg0);
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(900px 500px at 80% -10%, rgba(143, 214, 181, 0.18), transparent 55%),
+    radial-gradient(700px 420px at 0% 100%, rgba(201, 180, 138, 0.12), transparent 50%),
+    linear-gradient(165deg, var(--bg0), var(--bg1) 55%, #0a1612);
+}
+
+#root {
+  display: grid;
+  place-items: start center;
+  padding: 2rem 1rem 3rem;
+}
+
+button {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
