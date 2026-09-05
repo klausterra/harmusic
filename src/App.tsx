@@ -17,6 +17,7 @@ import {
   Onboarding,
   shouldShowOnboarding,
 } from './components/Onboarding'
+import { InstallPwaBanner } from './components/InstallPwa'
 import { VoiceTunePlayer } from './components/VoiceTunePlayer'
 import { VoiceKaraokePlayer } from './components/VoiceKaraokePlayer'
 import {
@@ -124,6 +125,7 @@ export default function App() {
         />
       ) : null}
       {children}
+      <InstallPwaBanner />
     </AppShell>
   )
 
@@ -146,6 +148,7 @@ export default function App() {
           }}
           error={auth.error}
         />
+        <InstallPwaBanner />
       </div>
     )
   }

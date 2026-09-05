@@ -1,0 +1,99 @@
+{
+  "id": "midi-player-game",
+  "type": "feature",
+  "status": "done",
+  "created_at": "2026-09-05T17:11:00.000Z",
+  "request": "Funcionalidade onde o usuário envia um MIDI, o sistema toca e mostra no instrumento escolhido onde tocar, com opção game",
+  "summary": "Rota MIDI: upload + exemplos, play/highlight sync com scrubber, 3 modos de jogo no instrumento selecionado",
+  "requirements": {
+    "description": "Nova aba/rota MIDI: usuário envia .mid/.midi ou escolhe exemplo embutido; o app toca com synth existente, destaca notas no instrumento do shell (piano/guitar/bass) sincronizado ao tempo, com pause/seek/velocidade; três modos game (rhythm, follow-along, karaoke) com score/XP local; aviso se faixa for polifônica demais para fretboard.",
+    "repo": "harmusic",
+    "user_story": "Como aluno, quero carregar um MIDI e ver/ouvir as notas no meu instrumento (e jogar nos 3 modos) para praticar peças reais além das lições.",
+    "acceptance": [
+      "Nav com rota/aba MIDI acessível quando logado",
+      "Upload de .mid/.midi parseado no client (sem backend)",
+      "Biblioteca com ≥2 MIDIs de exemplo embutidos",
+      "Seletor de track quando o arquivo tiver >1 faixa com notas",
+      "Play: áudio via synth atual + highlight sync no InstrumentView do instrumento do shell",
+      "Controles: play/pause, seek/scrubber, velocidade 0.5× / 1× / 1.5×",
+      "Aviso UI quando polifonia da faixa for alta para guitar/bass",
+      "Modo Game Rhythm: notas no tempo → input no instrumento → acerto/erro, combo, XP",
+      "Modo Game Follow-along: highlight antecipado → score por % pitch (timing relaxado)",
+      "Modo Game Karaoke: play-along livre → score final",
+      "Progresso/XP só local (localStorage / game state existente); sem sync nuvem",
+      "Testes unitários do parser/timing e build/test verdes"
+    ],
+    "out_of_scope": [
+      "Sync de progresso na nuvem (Firebase) para sessões MIDI",
+      "Import MusicXML / PDF",
+      "Web MIDI (teclado/controlador hardware)",
+      "Edição/composição de MIDI",
+      "Multiplayer / ranking online"
+    ],
+    "ui_entry": "1A — nova rota/aba MIDI",
+    "listen_mode": "2C — play + highlight sync + scrubber (pause, seek, 0.5/1/1.5×)",
+    "game_modes": ["rhythm", "follow-along", "karaoke"],
+    "midi_source": "4C — upload local + exemplos embutidos + seletor de track",
+    "instrument": "5C — instrumento do shell + aviso polifonia no fretboard"
+  },
+  "acceptance_criteria": [
+    "Usuário autenticado vê item MIDI na nav e abre a tela",
+    "Upload de .mid válido lista tracks e permite escolher uma",
+    "Exemplo embutido carrega sem upload",
+    "Play destaca notas no piano/guitar/bass conforme instrumento atual, em sync com o áudio",
+    "Pause, seek e mudança de velocidade alteram playback corretamente",
+    "Aviso aparece em guitar/bass quando a track tem acordes densos (threshold documentado)",
+    "Os 3 modos de jogo são selecionáveis e atribuem XP local ao concluir",
+    "npm test e npm run build passam"
+  ],
+  "validation_commands": [
+    "npm test",
+    "npm run build"
+  ],
+  "checklist": [
+    "Parser MIDI (.mid) + fixtures de teste",
+    "Scheduler de playback (tempo, seek, rate)",
+    "UI rota MIDI + upload + exemplos + track picker",
+    "Integração InstrumentView + highlight sync",
+    "Aviso polifonia fretboard",
+    "Game mode: rhythm",
+    "Game mode: follow-along",
+    "Game mode: karaoke",
+    "XP/HUD local reusando game/progress",
+    "Testes + build verdes"
+  ],
+  "checklist_done": [
+    "Parser MIDI (.mid) + fixtures de teste",
+    "Scheduler de playback (tempo, seek, rate)",
+    "UI rota MIDI + upload + exemplos + track picker",
+    "Integração InstrumentView + highlight sync",
+    "Aviso polifonia fretboard",
+    "Game mode: rhythm",
+    "Game mode: follow-along",
+    "Game mode: karaoke",
+    "XP/HUD local reusando game/progress",
+    "Testes + build verdes"
+  ],
+  "plan_summary": "Parse @tonejs/midi; scheduler AudioContext+rAF; InstrumentView highlight; 3 game modes + XP local; public/midi examples; rota AppShell MIDI",
+  "validation_results": [
+    { "command": "npm test", "exit_code": 0, "summary": "39 tests passed" },
+    { "command": "npm run build", "exit_code": 0, "summary": "tsc + vite build OK" }
+  ],
+  "review": {
+    "status": "approved",
+    "notes": "HIGHs corrigidos (seek remaining duration + lookahead). MEDs follow-up: clock AudioContext, rhythm guide tone, karaoke scoring."
+  },
+  "agents_dispatched": ["architect", "reviewer"],
+  "max_review_cycles": 3,
+  "review_cycle": 1,
+  "tech_notes": {
+    "lib_candidate": "@tonejs/midi (parse) + Web Audio / synth existente para playback",
+    "reuse": [
+      "src/components/InstrumentView.tsx",
+      "src/audio/synth.ts",
+      "src/game/progress.ts",
+      "src/components/GameHud.tsx",
+      "instrumento do AppShell"
+    ]
+  }
+}

@@ -11,6 +11,10 @@ export default defineConfig({
         'favicon.svg',
         'favicon.ico',
         'apple-touch-icon-180x180.png',
+        'pwa-64x64.png',
+        'pwa-192x192.png',
+        'pwa-512x512.png',
+        'maskable-icon-512x512.png',
       ],
       manifest: {
         name: 'Harmusic',

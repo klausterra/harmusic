@@ -1,57 +1,48 @@
 .sell {
-  width: min(960px, 100%);
+  width: min(1040px, 100%);
   max-width: 100%;
   min-width: 0;
   margin: 0 auto;
   display: grid;
-  gap: 0;
-  padding-bottom: 2.5rem;
+  gap: 3.5rem;
+  padding: 0 1rem 3.5rem;
   box-sizing: border-box;
 }
 
+/* Top bar */
 .sell__top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.35rem 0 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   animation: rise 0.45s ease both;
 }
 
-.sell__logo {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  background: linear-gradient(105deg, #eafff6, #5cff9d 55%, #00e6b8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
+/* Hero Section */
 .sell__hero {
-  min-height: min(78vh, 640px);
   display: grid;
   align-content: center;
   justify-items: center;
   text-align: center;
-  gap: 1rem;
-  padding: 2.5rem 0.5rem 3.5rem;
+  gap: 1.25rem;
+  padding: 2rem 0.5rem 1rem;
   position: relative;
   animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Subtle static background aura (no flashing/pulsing) */
 .sell__hero::before {
   content: '';
   pointer-events: none;
   position: absolute;
-  inset: 8% 5% auto;
-  height: 55%;
+  inset: -10% -20% auto;
+  height: 90%;
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(0, 230, 184, 0.22), transparent 62%),
-    radial-gradient(ellipse at 80% 70%, rgba(92, 255, 157, 0.1), transparent 50%);
+    radial-gradient(ellipse at 50% 15%, rgba(0, 230, 184, 0.18), transparent 60%),
+    radial-gradient(ellipse at 80% 40%, rgba(255, 209, 102, 0.08), transparent 50%);
   z-index: 0;
-  animation: sellGlow 8s ease-in-out infinite alternate;
 }
 
 .sell__hero > * {
@@ -59,42 +50,59 @@
   z-index: 1;
 }
 
-.sell__brand {
+.sell__hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(92, 255, 157, 0.08);
+  border: 1px solid rgba(92, 255, 157, 0.25);
+  color: #a7e8cc;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sell__hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #5cff9d;
+  box-shadow: 0 0 8px #5cff9d;
+}
+
+.sell__headline {
   margin: 0;
+  max-width: 22ch;
   font-family: var(--font-display);
-  font-size: clamp(3.2rem, 14vw, 5.6rem);
-  font-weight: 700;
-  letter-spacing: -0.055em;
-  line-height: 0.9;
-  background: linear-gradient(105deg, #eafff6 0%, #5cff9d 42%, #00e6b8 100%);
+  font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  color: #f0faf5;
+  line-height: 1.12;
+}
+
+.sell__accent-word {
+  background: linear-gradient(105deg, #eafff6 0%, #5cff9d 45%, #00e6b8 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-.sell__headline {
-  margin: 0;
-  max-width: 16ch;
-  font-family: var(--font-display);
-  font-size: clamp(1.35rem, 3.8vw, 1.85rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  color: #dceee6;
-  line-height: 1.25;
-}
-
 .sell__sub {
   margin: 0;
-  max-width: 32rem;
-  color: #9eb0a8;
-  line-height: 1.55;
-  font-size: 1rem;
+  max-width: 38rem;
+  color: #9cb3a8;
+  line-height: 1.6;
+  font-size: clamp(1rem, 2vw, 1.15rem);
 }
 
 .sell__cta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem;
+  gap: 0.85rem;
   justify-content: center;
   margin-top: 0.5rem;
 }
@@ -104,146 +112,566 @@
   text-decoration: none;
 }
 
-.sell__method,
-.sell__plans {
-  padding: 2.75rem 0.35rem 1.5rem;
-  text-align: center;
-  display: grid;
-  gap: 0.85rem;
-  justify-items: center;
-  animation: rise 0.7s ease both;
-  animation-delay: 0.08s;
+/* Interactive App Mockup HUD */
+.sell__mockup {
+  width: min(840px, 100%);
+  margin-top: 2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 255, 200, 0.2);
+  background: rgba(6, 12, 10, 0.85);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), 0 0 32px rgba(0, 230, 184, 0.1);
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  text-align: left;
 }
 
-.sell__method h2,
-.sell__plans h2 {
+.sell__mockup-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sell__mockup-tabs {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.sell__mockup-tab {
+  border: 0;
+  background: transparent;
+  color: #8da398;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sell__mockup-tab:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sell__mockup-tab.is-active {
+  color: #04110c;
+  background: linear-gradient(135deg, #5cff9d, #00e6b8);
+}
+
+.sell__mockup-pill {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: #ffd166;
+  background: rgba(255, 209, 102, 0.12);
+  border: 1px solid rgba(255, 209, 102, 0.3);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sell__mockup-screen {
+  padding: 1.5rem 1.25rem 1.25rem;
+}
+
+.mockup-content {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.mockup-caption {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #7d968b;
+  text-align: center;
+}
+
+/* Piano Mockup details */
+.mockup-chord-hud {
+  display: flex;
+  gap: 0.65rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mockup-chord-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.45rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mockup-chord-chip.is-active {
+  background: rgba(92, 255, 157, 0.12);
+  border-color: rgba(92, 255, 157, 0.4);
+}
+
+.mockup-chord-chip .deg {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #ffd166;
+  font-weight: 700;
+}
+
+.mockup-chord-chip strong {
+  font-size: 1.05rem;
+  color: #eafff6;
+}
+
+.mockup-chord-chip small {
+  font-size: 0.68rem;
+  color: #8da398;
+}
+
+.mockup-keys {
+  display: flex;
+  justify-content: center;
+  height: 110px;
+  position: relative;
+  background: #000;
+  border-radius: 10px;
+  padding: 4px;
+  max-width: 520px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.m-key {
+  position: relative;
+  border-radius: 0 0 5px 5px;
+}
+
+.m-white {
+  flex: 1;
+  background: #eef5f1;
+  margin: 0 1px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6px;
+  color: #223;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.m-white.is-hit {
+  background: linear-gradient(180deg, #5cff9d, #00e6b8);
+  box-shadow: 0 0 14px rgba(0, 230, 184, 0.6);
+  color: #04110c;
+}
+
+.m-black {
+  width: 6.5%;
+  height: 62%;
+  background: #121816;
+  margin-left: -3.25%;
+  margin-right: -3.25%;
+  z-index: 2;
+}
+
+/* Guitar Mockup */
+.mockup-fretboard {
+  display: grid;
+  gap: 12px;
+  padding: 1.5rem 1rem;
+  background: #111a16;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fret-string {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.35);
+  position: relative;
+}
+
+.fret-note {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #5cff9d;
+  color: #04110c;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(92, 255, 157, 0.6);
+}
+
+.fret-note.is-root {
+  background: #ffd166;
+  box-shadow: 0 0 10px rgba(255, 209, 102, 0.7);
+}
+
+/* Vocal tuner mockup */
+.mockup-tuner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #0b1813;
+  border-radius: 14px;
+}
+
+.mockup-tuner-gauge {
+  width: min(280px, 100%);
+  height: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  position: relative;
+  border: 1px solid rgba(0, 230, 184, 0.3);
+}
+
+.tuner-needle {
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  bottom: -4px;
+  width: 4px;
+  background: #5cff9d;
+  box-shadow: 0 0 12px #5cff9d;
+  border-radius: 2px;
+}
+
+.tuner-center-target {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: #5cff9d;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.tuner-note-display {
+  text-align: center;
+}
+
+.tuner-note-display strong {
+  font-size: 2.4rem;
+  font-family: var(--font-display);
+  color: #eafff6;
+  display: block;
+  line-height: 1;
+}
+
+.tuner-note-display span {
+  font-size: 0.82rem;
+  color: #ffd166;
+}
+
+/* MIDI Timeline mockup */
+.mockup-midi-timeline {
+  padding: 1.5rem 1rem;
+  background: #08120d;
+  border-radius: 12px;
+  position: relative;
+}
+
+.midi-track {
+  height: 48px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  position: relative;
+}
+
+.midi-block {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  background: linear-gradient(135deg, #00e6b8, #5cff9d);
+  color: #04110c;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.midi-block.is-gold {
+  background: linear-gradient(135deg, #ffd166, #ff9f1c);
+}
+
+.midi-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 45%;
+  width: 2px;
+  background: #ff5252;
+  box-shadow: 0 0 8px #ff5252;
+}
+
+/* 3 Pillars Section */
+.sell__pillars {
+  display: grid;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.sell__section-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   letter-spacing: -0.04em;
+  color: #eafff6;
 }
 
 .sell__section-lead {
+  margin: 0 auto;
+  max-width: 34rem;
+  color: #9cb3a8;
+  line-height: 1.55;
+  font-size: 1.05rem;
+}
+
+.sell__pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.pillar-card {
+  padding: 1.75rem 1.5rem;
+  border-radius: 20px;
+  background: rgba(8, 14, 12, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  display: grid;
+  gap: 0.85rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.pillar-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 230, 184, 0.3);
+}
+
+.pillar-card.is-highlight {
+  border-color: rgba(0, 230, 184, 0.35);
+  background: linear-gradient(170deg, rgba(0, 230, 184, 0.08), rgba(8, 14, 12, 0.95));
+}
+
+.pillar-card__icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.pillar-card h3 {
   margin: 0;
-  max-width: 28rem;
-  color: #9eb0a8;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: #eafff6;
+  letter-spacing: -0.02em;
+}
+
+.pillar-card p {
+  margin: 0;
+  color: #8fa69a;
+  font-size: 0.92rem;
   line-height: 1.5;
+}
+
+.pillar-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.pillar-card li {
+  font-size: 0.84rem;
+  color: #c7ded5;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pillar-card li::before {
+  content: '•';
+  color: #5cff9d;
+}
+
+/* Method Section */
+.sell__method {
+  display: grid;
+  gap: 1.25rem;
+  text-align: center;
 }
 
 .sell__steps {
   list-style: none;
-  margin: 0.75rem 0 0;
+  margin: 1.5rem auto 0;
   padding: 0;
-  width: min(520px, 100%);
+  width: min(640px, 100%);
   display: grid;
-  gap: 0.45rem;
+  gap: 0.75rem;
   text-align: left;
 }
 
 .sell__steps li {
   display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  padding: 0.7rem 0.85rem;
-  border-bottom: 1px solid rgba(0, 255, 200, 0.1);
-  font-family: var(--font-display);
-  font-size: 1.02rem;
-  letter-spacing: -0.02em;
-  color: #d7ebe2;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.15s ease;
+}
+
+.sell__steps li:hover {
+  background: rgba(92, 255, 157, 0.04);
+  border-color: rgba(92, 255, 157, 0.2);
 }
 
 .sell__steps em {
   font-style: normal;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  color: var(--accent);
-  min-width: 1.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #04110c;
+  background: #ffd166;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  letter-spacing: 0.06em;
+}
+
+.sell__steps strong {
+  display: block;
+  font-size: 1.05rem;
+  color: #eafff6;
+  margin-bottom: 0.2rem;
+}
+
+.sell__steps p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #8da398;
+  line-height: 1.45;
+}
+
+/* Plans Section */
+.sell__plans {
+  display: grid;
+  gap: 1.25rem;
+  text-align: center;
 }
 
 .sell__plan-row {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.85rem;
-  margin-top: 0.5rem;
+  gap: 1.25rem;
+  margin-top: 1rem;
   align-items: stretch;
 }
 
 .sell__plan {
   position: relative;
-  display: grid;
-  gap: 0.65rem;
-  justify-items: start;
+  display: flex;
+  flex-direction: column;
   text-align: left;
-  padding: 1.35rem 1.25rem 1.25rem;
-  border-radius: 20px;
+  padding: 2rem 1.75rem 1.75rem;
+  border-radius: 24px;
   border: 1px solid rgba(0, 255, 200, 0.14);
-  background:
-    linear-gradient(165deg, rgba(0, 230, 184, 0.06), transparent 50%),
-    rgba(7, 11, 16, 0.88);
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  background: rgba(7, 13, 11, 0.85);
+  transition: all 0.2s ease;
 }
 
 .sell__plan:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: rgba(0, 230, 184, 0.35);
 }
 
 .sell__plan.is-hot {
-  border-color: rgba(0, 230, 184, 0.45);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 230, 184, 0.12);
+  border-color: rgba(0, 230, 184, 0.5);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 230, 184, 0.15);
   background:
-    linear-gradient(165deg, rgba(0, 230, 184, 0.14), transparent 48%),
+    linear-gradient(165deg, rgba(0, 230, 184, 0.1), transparent 50%),
     rgba(6, 14, 12, 0.95);
 }
 
 .sell__plan-badge {
   position: absolute;
-  top: 0.85rem;
-  right: 0.85rem;
+  top: 1.25rem;
+  right: 1.25rem;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #04110c;
   background: linear-gradient(135deg, #5cff9d, #00e6b8);
   border-radius: 999px;
-  padding: 0.2rem 0.55rem;
-  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  font-weight: 750;
 }
 
 .sell__plan h3 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.15rem;
-  letter-spacing: -0.02em;
+  font-size: 1.45rem;
+  color: #eafff6;
+  letter-spacing: -0.03em;
 }
 
 .sell__price {
-  margin: 0;
+  margin: 0.75rem 0 0;
   display: flex;
   align-items: baseline;
-  gap: 0.3rem;
+  gap: 0.35rem;
 }
 
 .sell__price strong {
   font-family: var(--font-display);
-  font-size: clamp(1.85rem, 4vw, 2.35rem);
+  font-size: clamp(2.2rem, 4vw, 2.8rem);
   letter-spacing: -0.04em;
-  font-weight: 700;
+  font-weight: 750;
+  color: #fff;
 }
 
 .sell__price span {
   color: #8a9b93;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .sell__plan-blurb {
-  margin: 0 0 0.35rem;
-  color: #9eb0a8;
-  font-size: 0.9rem;
+  margin: 0.35rem 0 1rem;
+  color: #8da398;
+  font-size: 0.92rem;
   line-height: 1.45;
+}
+
+.sell__plan-perks {
+  list-style: none;
+  padding: 1rem 0;
+  margin: 0 0 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: grid;
+  gap: 0.6rem;
+}
+
+.sell__plan-perks li {
+  font-size: 0.88rem;
+  color: #c7ded5;
 }
 
 .sell__plan .btn {
@@ -253,45 +681,103 @@
 }
 
 .sell__fine {
-  margin: 0.35rem 0 0;
-  font-size: 0.78rem;
-  color: #6f8279;
+  margin: 0.5rem 0 0;
+  font-size: 0.84rem;
+  color: #728a7f;
 }
 
-.sell__foot {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+/* FAQ Section */
+.sell__faq {
+  display: grid;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.sell__faq-list {
+  width: min(720px, 100%);
+  margin: 0 auto;
   display: grid;
   gap: 0.65rem;
+  text-align: left;
+}
+
+.faq-item {
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.faq-item.is-open {
+  border-color: rgba(92, 255, 157, 0.3);
+  background: rgba(92, 255, 157, 0.03);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.25rem;
+  border: 0;
+  background: transparent;
+  color: #eafff6;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faq-toggle {
+  font-size: 1.25rem;
+  color: #5cff9d;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.faq-answer {
+  margin: 0;
+  padding: 0 1.25rem 1.25rem;
+  color: #8da398;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* Footer */
+.sell__foot {
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: grid;
+  gap: 1.25rem;
   justify-items: center;
   text-align: center;
-  color: #6f8279;
+}
+
+.sell__foot-brand p {
+  margin: 0.4rem 0 0;
+  font-size: 0.88rem;
+  color: #728a7f;
+}
+
+.sell__copyright {
+  margin: 0;
   font-size: 0.78rem;
+  color: #54685f;
 }
 
-@keyframes sellGlow {
-  from {
-    opacity: 0.75;
-    transform: scale(1);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1.04);
-  }
-}
-
-@media (max-width: 720px) {
-  .sell__hero {
-    min-height: auto;
-    padding: 1.75rem 0.25rem 2.5rem;
+@media (max-width: 820px) {
+  .sell__pillars-grid {
+    grid-template-columns: 1fr;
   }
 
   .sell__plan-row {
     grid-template-columns: 1fr;
   }
 
-  .sell__steps li {
-    font-size: 0.95rem;
+  .sell__mockup-bar {
+    justify-content: center;
   }
 }

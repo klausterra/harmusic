@@ -1,0 +1,57 @@
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  line-height: 1;
+  text-decoration: none;
+  user-select: none;
+}
+
+.brand-logo__mark {
+  flex-shrink: 0;
+  display: block;
+  border-radius: 8px;
+  filter: drop-shadow(0 4px 12px rgba(0, 230, 184, 0.2));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.brand-logo:hover .brand-logo__mark {
+  transform: scale(1.05);
+  filter: drop-shadow(0 6px 16px rgba(0, 230, 184, 0.35));
+}
+
+.brand-logo__name {
+  font-family: var(--font-display, inherit);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  background: linear-gradient(105deg, #eafff6, #5cff9d 55%, #00e6b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Sizes */
+.brand-logo--sm .brand-logo__mark {
+  width: 22px;
+  height: 22px;
+}
+.brand-logo--sm .brand-logo__name {
+  font-size: 1.05rem;
+}
+
+.brand-logo--md .brand-logo__mark {
+  width: 28px;
+  height: 28px;
+}
+.brand-logo--md .brand-logo__name {
+  font-size: 1.35rem;
+}
+
+.brand-logo--lg .brand-logo__mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+.brand-logo--lg .brand-logo__name {
+  font-size: 1.85rem;
+}

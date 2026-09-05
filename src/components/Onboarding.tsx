@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BrandLogo } from './BrandLogo'
 import './Onboarding.css'
 
 const KEY = 'harmusic.onboarding.v1'
@@ -50,6 +51,9 @@ export function Onboarding({
   return (
     <div className="onboard" role="dialog" aria-modal="true" data-testid="onboarding">
       <div className="onboard__card">
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.5rem' }}>
+          <BrandLogo size="lg" showText={false} />
+        </div>
         <p className="onboard__kicker">
           Bem-vindo · {step + 1}/{steps.length}
         </p>

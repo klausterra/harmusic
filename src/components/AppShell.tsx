@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BrandLogo } from './BrandLogo'
 import { INSTRUMENTS, type InstrumentId } from '../catalog/lessons'
 import { useAuth } from '../auth/useAuth'
 import './AppShell.css'
@@ -71,8 +72,9 @@ export function AppShell({
           type="button"
           className="shell__brand"
           onClick={() => onNavigate({ name: 'home' })}
+          aria-label="Harmusic início"
         >
-          Harmusic
+          <BrandLogo size="md" />
         </button>
         {focusMode ? (
           <button

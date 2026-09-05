@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07130e"/>
+      <stop offset="50%" stop-color="#0b1c15"/>
+      <stop offset="100%" stop-color="#050a08"/>
+    </linearGradient>
+    <linearGradient id="mintGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eafff6"/>
+      <stop offset="45%" stop-color="#5cff9d"/>
+      <stop offset="100%" stop-color="#00e6b8"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff4d4"/>
+      <stop offset="50%" stop-color="#ffd166"/>
+      <stop offset="100%" stop-color="#d49b28"/>
+    </linearGradient>
+    <linearGradient id="staffGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(92,255,157,0.15)"/>
+      <stop offset="50%" stop-color="rgba(0,230,184,0.45)"/>
+      <stop offset="100%" stop-color="rgba(92,255,157,0.15)"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background with subtle border -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  <rect width="504" height="504" x="4" y="4" rx="108" fill="none" stroke="rgba(92,255,157,0.22)" stroke-width="3"/>
+
+  <!-- Subtle staff / harmony wave lines behind -->
+  <g opacity="0.35">
+    <path d="M76 210 Q 180 180, 256 210 T 436 210" fill="none" stroke="url(#staffGrad)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M76 256 Q 180 226, 256 256 T 436 256" fill="none" stroke="url(#staffGrad)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M76 302 Q 180 272, 256 302 T 436 302" fill="none" stroke="url(#staffGrad)" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Stylized H + Soundwave + Note stem -->
+  <!-- Left vertical bar (Keyboard / String resonance pillar) -->
+  <rect x="132" y="128" width="34" height="256" rx="17" fill="url(#mintGrad)" filter="url(#glow)"/>
+
+  <!-- Right vertical bar / Note stem flowing upwards -->
+  <rect x="346" y="128" width="34" height="256" rx="17" fill="url(#mintGrad)" filter="url(#glow)"/>
+
+  <!-- Crossbar connecting H: elegant upward harmonic curve -->
+  <path d="M149 266 C 190 236, 240 236, 280 262 C 305 278, 325 272, 363 250"
+        fill="none" stroke="url(#mintGrad)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Golden harmonic note head at center-right resonance point -->
+  <g transform="translate(262, 276) rotate(-24)">
+    <ellipse cx="0" cy="0" rx="38" ry="28" fill="url(#goldGrad)" filter="url(#glow)"/>
+    <ellipse cx="-4" cy="-3" rx="18" ry="11" fill="rgba(255,255,255,0.45)"/>
+  </g>
+
+  <!-- Crown wave accent on right stem (musical flag / resonance spark) -->
+  <path d="M363 138 C 395 142, 420 166, 424 198 C 400 182, 376 178, 363 178 Z"
+        fill="url(#goldGrad)" opacity="0.95"/>
+</svg>
