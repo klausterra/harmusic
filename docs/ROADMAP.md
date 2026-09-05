@@ -14,10 +14,11 @@
 - [x] Voz: afinador + karaoke harmônico (pitch em tempo real)
 - [x] PWA offline (manifest + service worker + install CTA)
 - [x] MIDI: upload + exemplos, play/highlight no instrumento, scrubber, 3 modos game
+- [x] Biblioteca MIDI (~299) com busca e filtros no player
 
 ## Próximo
 - [ ] Seletor de tônico (C, G, F, D…)
-- [ ] Mais progressões (ii–V–I, I–vi–IV–V)
+- [ ] Mais progressões (ii–V–I, I–vi–IV–V) na trilha de lições
 - [ ] Modo menor natural / harmônico
 - [ ] Ajuste fino de voicing (inversões)
 - [ ] Feedback sonoro de erro/acerto distinto

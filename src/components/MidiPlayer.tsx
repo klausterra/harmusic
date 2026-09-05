@@ -22,7 +22,7 @@ import {
   saveInstrumentPrefs,
   type InstrumentPrefs,
 } from '../instrument/prefs'
-import { MIDI_EXAMPLES } from '../midi/examples'
+import { MIDI_CATALOG, type MidiCatalogEntry } from '../midi/catalog'
 import {
   parseMidiArrayBuffer,
   pianoRangeForNotes,
@@ -48,6 +48,7 @@ import type {
 import { GameHud } from './GameHud'
 import { Hint } from './Hint'
 import { InstrumentView } from './InstrumentView'
+import { MidiLibrary } from './MidiLibrary'
 import './MidiPlayer.css'
 import './LessonFlow.css'
 import '../pages/pages.css'
@@ -252,6 +253,19 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
     }
   }
 
+  function loadCatalogEntry(entry: MidiCatalogEntry) {
+    void loadExample(entry.url, entry.title)
+  }
+
+  function backToLibrary() {
+    schedRef.current?.pause()
+    setParsed(null)
+    setError(null)
+    setSongTime(0)
+    setPlaying(false)
+    setActiveMidis(new Set())
+  }
+
   async function togglePlay() {
     await ensureAudioRunning()
     setSynthVoice(instrument)
@@ -353,74 +367,46 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
             <Hint text="O instrumento do topo define o visual e o toque nos modos de jogo." />
           </h1>
           <p className="page__lead page__lead--wide">
-            Carregue um arquivo, veja as notas no{' '}
+            Escolha na biblioteca ({MIDI_CATALOG.count} peças), envie um .mid ou
+            treine no{' '}
             {instrument === 'piano'
               ? 'piano'
               : instrument === 'guitar'
                 ? 'violão'
-                : 'baixo'}{' '}
-            e treine no ritmo.
+                : 'baixo'}
+            .
           </p>
         </div>
         <GameHud game={game} flashXp={flashXp} newBadge={newBadge} />
       </header>
 
       {!parsed ? (
-        <div className="midi-empty">
-          <p className="midi-empty__title">Comece por um exemplo</p>
-          <p className="midi-empty__lead">
-            Ou envie seu .mid — sem instalação, tudo no navegador.
-          </p>
-          <div className="midi-empty__grid">
-            {MIDI_EXAMPLES.map((ex) => (
-              <button
-                key={ex.id}
-                type="button"
-                className="midi-empty__card"
-                data-testid={`midi-example-${ex.id}`}
-                onClick={() => void loadExample(ex.url, ex.title)}
-              >
-                <strong>{ex.title}</strong>
-                <span>Abrir e tocar</span>
-              </button>
-            ))}
-            <label className="midi-empty__card midi-empty__card--upload">
-              <strong>Enviar meu MIDI</strong>
-              <span>Arquivo .mid / .midi</span>
-              <input
-                type="file"
-                accept=".mid,.midi,audio/midi,audio/x-midi"
-                data-testid="midi-upload"
-                onChange={(e) => void onUpload(e.target.files?.[0] ?? null)}
-              />
-            </label>
-          </div>
-        </div>
+        <MidiLibrary
+          loading={loading}
+          onSelect={loadCatalogEntry}
+          onUpload={(file) => void onUpload(file)}
+        />
       ) : null}
 
       {parsed ? (
-      <div className="midi-player__sources">
-        <label className="midi-player__upload btn btn--ghost">
-          Trocar arquivo
-          <input
-            type="file"
-            accept=".mid,.midi,audio/midi,audio/x-midi"
-            onChange={(e) => void onUpload(e.target.files?.[0] ?? null)}
-          />
-        </label>
-        <div className="midi-player__examples" role="group" aria-label="Exemplos">
-          {MIDI_EXAMPLES.map((ex) => (
-            <button
-              key={ex.id}
-              type="button"
-              className="btn btn--ghost"
-              onClick={() => void loadExample(ex.url, ex.title)}
-            >
-              {ex.title}
-            </button>
-          ))}
+        <div className="midi-player__sources">
+          <button
+            type="button"
+            className="btn btn--ghost"
+            onClick={backToLibrary}
+            data-testid="midi-back-library"
+          >
+            Biblioteca
+          </button>
+          <label className="midi-player__upload btn btn--ghost">
+            Enviar MIDI
+            <input
+              type="file"
+              accept=".mid,.midi,audio/midi,audio/x-midi"
+              onChange={(e) => void onUpload(e.target.files?.[0] ?? null)}
+            />
+          </label>
         </div>
-      </div>
       ) : null}
 
       {loading ? <p className="shell__muted">Carregando…</p> : null}

@@ -1,0 +1,229 @@
+.midi-lib {
+  display: grid;
+  gap: 1.1rem;
+  padding: 1.35rem 1.2rem 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 255, 200, 0.14);
+  background: rgba(8, 14, 16, 0.72);
+}
+
+.midi-lib__intro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.midi-lib__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.midi-lib__lead {
+  margin: 0.35rem 0 0;
+  color: #9eb0a8;
+  line-height: 1.5;
+  max-width: 42ch;
+}
+
+.midi-lib__upload {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 230, 184, 0.35);
+  background: rgba(0, 230, 184, 0.12);
+  color: #b8ffe8;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.midi-lib__upload input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.midi-lib__search {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.midi-lib__search input[type='search'] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.35);
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.midi-lib__search input[type='search']:focus {
+  outline: 2px solid rgba(0, 230, 184, 0.45);
+  outline-offset: 1px;
+  border-color: rgba(0, 230, 184, 0.4);
+}
+
+.midi-lib__count {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #8a9b93;
+}
+
+.midi-lib__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: flex-end;
+}
+
+.midi-lib__filters label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  color: #8a9b93;
+}
+
+.midi-lib__filters select {
+  min-width: 7.5rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: inherit;
+}
+
+.midi-lib__clear {
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: #b4c4bc;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+}
+
+.midi-lib__section-label {
+  margin: 0 0 0.55rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #7f9189;
+}
+
+.midi-lib__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.midi-lib__card {
+  display: grid;
+  gap: 0.3rem;
+  text-align: left;
+  padding: 1rem 0.9rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 255, 200, 0.16);
+  background: rgba(0, 0, 0, 0.25);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.midi-lib__card:hover {
+  border-color: rgba(0, 230, 184, 0.45);
+}
+
+.midi-lib__card strong {
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  line-height: 1.25;
+}
+
+.midi-lib__card span {
+  color: #8a9b93;
+  font-size: 0.82rem;
+}
+
+.midi-lib__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  max-height: min(42vh, 420px);
+  overflow: auto;
+}
+
+.midi-lib__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  text-align: left;
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.22);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.midi-lib__row:hover {
+  border-color: rgba(0, 230, 184, 0.35);
+  background: rgba(0, 230, 184, 0.06);
+}
+
+.midi-lib__row-main {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.midi-lib__row-main strong {
+  font-size: 0.95rem;
+}
+
+.midi-lib__row-main span {
+  font-size: 0.8rem;
+  color: #8a9b93;
+}
+
+.midi-lib__row-cta {
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  color: #9fe9cf;
+}
+
+.midi-lib__empty,
+.midi-lib__more {
+  margin: 0.35rem 0 0;
+  color: #8a9b93;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 860px) {
+  .midi-lib__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .midi-lib__grid {
+    grid-template-columns: 1fr;
+  }
+}

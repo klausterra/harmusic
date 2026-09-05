@@ -71,7 +71,21 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // MIDI library stays on-demand (hundreds of files); do not precache.
         navigateFallback: '/index.html',
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith('/midi/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'harmusic-midi',
+              expiration: {
+                maxEntries: 80,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              },
+            },
+          },
+        ],
       },
       devOptions: {
         enabled: true,

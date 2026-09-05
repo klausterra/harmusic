@@ -4,6 +4,7 @@ export interface MidiExample {
   url: string
 }
 
+/** Legacy smoke fixtures in /public/midi (kept for regression). */
 export const MIDI_EXAMPLES: MidiExample[] = [
   {
     id: 'c-major-scale',
