@@ -227,7 +227,7 @@ export function VoicePage({
                     ? ' · bloqueado na trilha — avance no Início'
                     : status === 'cleared'
                       ? ' · concluído'
-                      : ' · liberado'}
+                      : ' · liberado · pode começar'}
                 </span>
               </button>
             </li>
@@ -271,7 +271,7 @@ export function VoicePage({
           <span>
             {nextTune
               ? `Abrir: ${nextTune.title}`
-              : 'Nenhum afinador liberado ainda — avance a trilha no Início.'}
+              : 'Escolha um afinador na lista abaixo.'}
           </span>
         </button>
         <button
@@ -286,7 +286,7 @@ export function VoicePage({
           <span>
             {nextKaraoke
               ? `Abrir: ${nextKaraoke.title}`
-              : 'Nenhum karaoke liberado ainda — conclua I–IV–V–I e o afinador.'}
+              : 'Escolha um karaoke na lista abaixo.'}
           </span>
         </button>
       </div>

@@ -38,9 +38,8 @@ describe('learning path', () => {
   it('exposes voice nodes for Canto hub', () => {
     const voices = voicePathNodes()
     expect(voices.every((n) => n.kind !== 'lesson')).toBe(true)
-    expect(nextVoiceNode([])).toBeUndefined()
-    expect(
-      nextVoiceNode(['c-maj-degrees', 'c-maj-scale', 'c-maj-1451'])?.id,
-    ).toBe('voice-tune-c')
+    expect(nextVoiceNode([])?.id).toBe('voice-tune-c')
+    expect(nodeStatus('voice-karaoke-c1451', [])).toBe('available')
+    expect(nodeStatus('voice-tune-a', [])).toBe('available')
   })
 })

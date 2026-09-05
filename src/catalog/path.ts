@@ -145,6 +145,11 @@ export function nodeStatus(
   cleared: readonly string[],
 ): NodeStatus {
   if (cleared.includes(nodeId)) return 'cleared'
+  const node = flatPathNodes().find((n) => n.id === nodeId)
+  // Voice practice is always open from the Voz menu / path.
+  if (node?.kind === 'voice-tune' || node?.kind === 'voice-karaoke') {
+    return 'available'
+  }
   const nodes = flatPathNodes()
   const idx = nodes.findIndex((n) => n.id === nodeId)
   if (idx <= 0) return 'available'
