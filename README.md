@@ -38,12 +38,16 @@ Repositório: `klausterra/harmusic`
 bash scripts/publish-github.sh
 ```
 
-## Deploy automático
-O workflow `.github/workflows/deploy-cloudflare-pages.yml` publica a branch `main` no projeto Cloudflare Pages `harmusic`.
+## Deploy
+Publicação via **Wrangler** (não usa GitHub Actions):
 
-Secrets no GitHub:
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
+```powershell
+npm run build
+$env:CLOUDFLARE_ACCOUNT_ID = "47bd0ba5c9ea05229d4bbb67de2f0df1"
+npx wrangler pages deploy dist --project-name=harmusic --branch=main
+```
+
+Detalhes em `docs/CLOUDFLARE.md`.
 
 ## Documentação
 - `docs/ARCHITECTURE.md`
