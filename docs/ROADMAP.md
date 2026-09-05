@@ -10,6 +10,9 @@
 - [x] Workflow Cloudflare Pages + scripts GitHub
 - [x] UI tech (HUD, motion, teclado jogável)
 - [x] Gamificação: XP, nível, combo, streak, badges
+- [x] Trilha estilo Duolingo (path + modo foco + vidas)
+- [x] Voz: afinador + karaoke harmônico (pitch em tempo real)
+- [x] PWA offline (manifest + service worker + install CTA)
 
 ## Próximo
 - [ ] Seletor de tônico (C, G, F, D…)

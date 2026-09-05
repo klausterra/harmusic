@@ -188,6 +188,10 @@
   letter-spacing: 0.08em;
 }
 
+.shell--focus .shell__top {
+  justify-content: space-between;
+}
+
 @media (max-width: 720px) {
   .shell__top {
     padding: 0.65rem;
@@ -215,5 +219,9 @@
 
   .shell__user {
     max-width: 110px;
+  }
+
+  .shell--focus .shell__nav {
+    display: none;
   }
 }

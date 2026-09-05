@@ -1,0 +1,78 @@
+.pitch-meter {
+  width: min(420px, 100%);
+  display: grid;
+  gap: 0.55rem;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 255, 200, 0.14);
+  background: rgba(7, 11, 16, 0.85);
+}
+
+.pitch-meter.is-tune {
+  border-color: rgba(92, 255, 157, 0.45);
+  box-shadow: 0 0 24px rgba(0, 230, 184, 0.15);
+}
+
+.pitch-meter__label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.72rem;
+  color: #8a9b93;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pitch-meter__label strong {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-transform: none;
+}
+
+.pitch-meter__track {
+  position: relative;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 90, 110, 0.35),
+    rgba(0, 230, 184, 0.35) 50%,
+    rgba(255, 90, 110, 0.35)
+  );
+}
+
+.pitch-meter__center {
+  position: absolute;
+  left: 50%;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: #eafff6;
+  transform: translateX(-50%);
+}
+
+.pitch-meter__needle {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #04110c;
+  border: 2px solid #5cff9d;
+  transform: translate(-50%, -50%);
+  transition: left 0.08s linear;
+}
+
+.pitch-meter__status {
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #c8ddd4;
+}
+
+.pitch-meter.is-tune .pitch-meter__status {
+  color: #5cff9d;
+  font-weight: 600;
+}

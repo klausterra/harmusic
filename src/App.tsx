@@ -5,8 +5,11 @@ import {
   type InstrumentId,
   type LessonDef,
 } from './catalog/lessons'
+import { flatPathNodes, type PathNode } from './catalog/path'
 import { AppShell, type AppRoute } from './components/AppShell'
 import { LessonPlayer } from './components/LessonPlayer'
+import { VoiceTunePlayer } from './components/VoiceTunePlayer'
+import { VoiceKaraokePlayer } from './components/VoiceKaraokePlayer'
 import {
   AdminPage,
   HomePage,
@@ -40,6 +43,7 @@ export default function App() {
       : 'piano'
   })
   const [cleared, setCleared] = useState<string[]>(() => loadCleared())
+  const pathTotal = flatPathNodes().length
 
   useEffect(() => {
     localStorage.setItem(INSTRUMENT_KEY, instrument)
@@ -55,14 +59,46 @@ export default function App() {
     setRoute({ name: 'play', lessonId: lesson.id, instrument })
   }
 
-  function markCleared(lessonId: string) {
+  function markCleared(nodeId: string) {
     setCleared((prev) => {
-      if (prev.includes(lessonId)) return prev
-      const next = [...prev, lessonId]
+      if (prev.includes(nodeId)) return prev
+      const next = [...prev, nodeId]
       localStorage.setItem(CLEARED_KEY, JSON.stringify(next))
       return next
     })
   }
+
+  function openNode(node: PathNode) {
+    if (node.kind === 'lesson' && node.lessonId) {
+      const lesson = getLesson(node.lessonId)
+      if (lesson) playLesson(lesson)
+      return
+    }
+    if (node.kind === 'voice-tune') {
+      setRoute({ name: 'voice-tune', nodeId: node.id })
+      return
+    }
+    if (node.kind === 'voice-karaoke' && node.lessonId) {
+      setRoute({
+        name: 'voice-karaoke',
+        nodeId: node.id,
+        lessonId: node.lessonId,
+      })
+    }
+  }
+
+  const shell = (children: React.ReactNode) => (
+    <AppShell
+      route={route}
+      instrument={instrument}
+      cleared={cleared}
+      pathTotal={pathTotal}
+      onNavigate={setRoute}
+      onInstrument={setInstrument}
+    >
+      {children}
+    </AppShell>
+  )
 
   if (auth.loading) {
     return (
@@ -90,49 +126,49 @@ export default function App() {
   if (route.name === 'play') {
     const lesson = getLesson(route.lessonId)
     if (!lesson) {
-      return (
-        <AppShell
-          route={{ name: 'lessons' }}
-          instrument={instrument}
-          cleared={cleared}
-          onNavigate={setRoute}
-          onInstrument={setInstrument}
-        >
-          <p>Lição não encontrada.</p>
-        </AppShell>
-      )
+      return shell(<p>Lição não encontrada.</p>)
     }
-    return (
-      <AppShell
-        route={route}
-        instrument={instrument}
-        cleared={cleared}
-        onNavigate={setRoute}
-        onInstrument={setInstrument}
-      >
-        <LessonPlayer
-          lesson={lesson}
-          instrument={route.instrument}
-          onExit={() => setRoute({ name: 'lessons' })}
-          onCleared={markCleared}
-        />
-      </AppShell>
+    return shell(
+      <LessonPlayer
+        lesson={lesson}
+        instrument={route.instrument}
+        onExit={() => setRoute({ name: 'home' })}
+        onCleared={markCleared}
+      />,
     )
   }
 
-  return (
-    <AppShell
-      route={route}
-      instrument={instrument}
-      cleared={cleared}
-      onNavigate={setRoute}
-      onInstrument={setInstrument}
-    >
+  if (route.name === 'voice-tune') {
+    const node = flatPathNodes().find((n) => n.id === route.nodeId)
+    const tonicLessonId = node?.tonicLessonId ?? 'c-maj-scale'
+    return shell(
+      <VoiceTunePlayer
+        nodeId={route.nodeId}
+        tonicLessonId={tonicLessonId}
+        onExit={() => setRoute({ name: 'home' })}
+        onCleared={markCleared}
+      />,
+    )
+  }
+
+  if (route.name === 'voice-karaoke') {
+    return shell(
+      <VoiceKaraokePlayer
+        nodeId={route.nodeId}
+        lessonId={route.lessonId}
+        onExit={() => setRoute({ name: 'home' })}
+        onCleared={markCleared}
+      />,
+    )
+  }
+
+  return shell(
+    <>
       {route.name === 'home' ? (
         <HomePage
           instrument={instrument}
-          onOpenLessons={() => setRoute({ name: 'lessons' })}
-          onContinue={playLesson}
+          cleared={cleared}
+          onOpenNode={openNode}
         />
       ) : null}
       {route.name === 'lessons' ? (
@@ -143,10 +179,14 @@ export default function App() {
         />
       ) : null}
       {route.name === 'practice' ? (
-        <PracticePage instrument={instrument} onPick={playLesson} />
+        <PracticePage
+          instrument={instrument}
+          cleared={cleared}
+          onPick={playLesson}
+        />
       ) : null}
       {route.name === 'progress' ? <ProgressPage cleared={cleared} /> : null}
       {route.name === 'admin' && auth.isAdmin ? <AdminPage /> : null}
-    </AppShell>
+    </>,
   )
 }

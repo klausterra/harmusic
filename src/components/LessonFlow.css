@@ -331,6 +331,38 @@
   gap: 0.75rem;
 }
 
+.hearts {
+  display: flex;
+  gap: 0.25rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+
+.heart {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.heart.is-on {
+  color: #ff6b7a;
+}
+
+.panel--center {
+  text-align: center;
+  justify-items: center;
+  padding: 2rem 1rem;
+}
+
+.steps--readonly {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.steps--readonly .steps__item {
+  cursor: default;
+}
+
 @keyframes rise {
   from {
     opacity: 0;
