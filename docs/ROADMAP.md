@@ -23,6 +23,6 @@
 - [ ] CNAME `harmusic.hipercube.ia.br` → `harmusic.pages.dev`
 
 ## Depois
-- [x] PWA offline (manifest + service worker + install CTA)
 - [ ] Conta / progresso na nuvem (opcional)
 - [ ] DNS `harmusic.hipercube.ia.br` → Pages
+- [ ] Checkout real de assinatura (Stripe/MP)
