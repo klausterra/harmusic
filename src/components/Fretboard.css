@@ -1,18 +1,25 @@
 .fretboard {
   width: 100%;
-  max-width: 720px;
+  max-width: 920px;
   display: grid;
   grid-template-columns: 2rem 1fr;
   grid-template-rows: auto auto;
   gap: 0.35rem 0.45rem;
   padding: 0.9rem;
   border-radius: 18px;
+  overflow-x: auto;
   background:
     linear-gradient(180deg, #241910, #120d09 55%, #0c0907);
   border: 1px solid rgba(201, 160, 100, 0.22);
   box-shadow:
     inset 0 1px 0 rgba(255, 220, 170, 0.08),
     0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.fretboard--bass {
+  background:
+    linear-gradient(180deg, #1a2228, #0c1014 55%, #080a0c);
+  border-color: rgba(120, 160, 180, 0.28);
 }
 
 .fretboard__nut {

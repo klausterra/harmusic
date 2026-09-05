@@ -413,4 +413,30 @@
   .steps__item:last-child {
     grid-column: auto;
   }
+
+  .lesson-bar {
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .panel__head h1 {
+    font-size: clamp(1.45rem, 7vw, 1.85rem);
+  }
+}
+
+@media (max-width: 400px) {
+  .steps__item {
+    min-width: 3.8rem;
+    font-size: 0.78rem;
+    padding: 0.35rem 0.4rem;
+  }
+
+  .degrees {
+    gap: 0.35rem;
+  }
+
+  .chip {
+    min-width: 3.6rem;
+    padding: 0.55rem 0.45rem;
+  }
 }

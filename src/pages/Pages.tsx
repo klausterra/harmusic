@@ -14,6 +14,7 @@ import {
 } from '../catalog/path'
 import { loadGame, levelFromXp, xpIntoLevel } from '../game/progress'
 import { InstallPwaButton } from '../components/InstallPwa'
+import { TipBanner } from '../components/Hint'
 import './pages.css'
 import './path.css'
 
@@ -38,11 +39,16 @@ export function HomePage({
           Streak {game.streakDays}d · nível {levelFromXp(game.xp)} ·{' '}
           {xpIntoLevel(game.xp)}/100 XP
         </p>
+        <TipBanner
+          title="Como usar"
+          body="Toque Continuar para a próxima lição. Em Teoria você lê os conceitos. Em cada instrumento escolha acorde/solo (teclado e violão) ou trastes (baixo)."
+        />
         {next ? (
           <button
             type="button"
             className="btn"
             data-testid="cta-continue"
+            title="Abre a próxima lição liberada na trilha"
             onClick={() => onOpenNode(next)}
           >
             Continuar: {next.title}

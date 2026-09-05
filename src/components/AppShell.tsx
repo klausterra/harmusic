@@ -1,5 +1,6 @@
 import { INSTRUMENTS, type InstrumentId } from '../catalog/lessons'
 import { useAuth } from '../auth/useAuth'
+import { Hint } from './Hint'
 import './AppShell.css'
 
 export type AppRoute =
@@ -7,6 +8,7 @@ export type AppRoute =
   | { name: 'lessons' }
   | { name: 'practice' }
   | { name: 'progress' }
+  | { name: 'theory' }
   | { name: 'admin' }
   | { name: 'play'; lessonId: string; instrument: InstrumentId }
   | { name: 'voice-tune'; nodeId: string }
@@ -61,15 +63,27 @@ export function AppShell({
               {(
                 [
                   ['home', 'Trilha'],
-                  ['lessons', 'Catálogo'],
+                  ['theory', 'Teoria'],
                   ['practice', 'Praticar'],
                   ['progress', 'Progresso'],
+                  ['lessons', 'Catálogo'],
                 ] as const
               ).map(([id, label]) => (
                 <button
                   key={id}
                   type="button"
                   className={route.name === id ? 'is-active' : ''}
+                  title={
+                    id === 'home'
+                      ? 'Sua sequência de lições — toque Continuar'
+                      : id === 'theory'
+                        ? 'Conceitos: graus, progressões e o método'
+                        : id === 'practice'
+                          ? 'Revisar lições já liberadas'
+                          : id === 'progress'
+                            ? 'XP, streak e unidades concluídas'
+                            : 'Todas as lições (bloqueadas até liberar na trilha)'
+                  }
                   onClick={() => onNavigate({ name: id })}
                 >
                   {label}
@@ -119,12 +133,17 @@ export function AppShell({
 
       {!focusMode ? (
         <div className="shell__instruments" role="group" aria-label="Instrumento">
+          <div className="shell__instruments-label">
+            <span>Instrumento</span>
+            <Hint text="Escolhe piano, violão ou baixo para as lições de instrumento. Não muda as lições de voz." />
+          </div>
           {INSTRUMENTS.map((ins) => (
             <button
               key={ins.id}
               type="button"
               className={instrument === ins.id ? 'is-active' : ''}
               data-testid={`instrument-${ins.id}`}
+              title={`Treinar no ${ins.label} (${ins.short})`}
               onClick={() => onInstrument(ins.id)}
             >
               {ins.label}

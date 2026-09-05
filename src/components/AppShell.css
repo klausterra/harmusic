@@ -98,8 +98,20 @@
 
 .shell__instruments {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: auto repeat(3, minmax(0, 1fr));
   gap: 0.45rem;
+  align-items: center;
+}
+
+.shell__instruments-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7f9088;
+  padding-right: 0.25rem;
 }
 
 .shell__instruments button {
@@ -186,6 +198,11 @@
   color: #8a9b93;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .shell--focus .shell__top {
@@ -194,34 +211,77 @@
 
 @media (max-width: 720px) {
   .shell__top {
-    padding: 0.65rem;
+    padding: 0.55rem 0.65rem;
+    gap: 0.45rem;
   }
 
   .shell__nav {
     order: 3;
     width: 100%;
     gap: 0.15rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.1rem;
+  }
+
+  .shell__nav::-webkit-scrollbar {
+    display: none;
   }
 
   .shell__nav button {
-    padding: 0.45rem 0.65rem;
-    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.78rem;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .shell__instruments {
+    grid-template-columns: auto repeat(3, minmax(0, 1fr));
+  }
+
+  .shell__instruments button {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.78rem;
+  }
+
+  .shell__user {
+    max-width: 90px;
+  }
+
+  .shell--focus .shell__nav {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .shell__brand {
+    font-size: 1.15rem;
+  }
+
+  .shell__user {
+    display: none;
   }
 
   .shell__instruments {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .shell__instruments button {
-    padding: 0.55rem 0.5rem;
-    font-size: 0.8rem;
+  .shell__instruments-label {
+    grid-column: 1 / -1;
   }
 
-  .shell__user {
-    max-width: 110px;
-  }
-
-  .shell--focus .shell__nav {
+  .shell__instruments button small {
     display: none;
+  }
+
+  .shell__instruments button {
+    text-align: center;
+    padding: 0.55rem 0.35rem;
+  }
+
+  .shell__auth .btn--sm {
+    padding: 0.4rem 0.65rem;
   }
 }

@@ -1,0 +1,63 @@
+.inst-view {
+  width: 100%;
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
+}
+
+.inst-toolbar {
+  width: min(720px, 100%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  padding: 0.35rem 0.15rem;
+}
+
+.inst-toolbar__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+  color: #c8ddd4;
+}
+
+.inst-toggle {
+  display: inline-flex;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 200, 0.14);
+  background: rgba(8, 12, 16, 0.75);
+}
+
+.inst-toggle button {
+  border: 0;
+  background: transparent;
+  color: #9eb0a8;
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.inst-toggle button.is-on {
+  background: linear-gradient(135deg, #5cff9d, #00e6b8);
+  color: #04110c;
+  font-weight: 700;
+}
+
+@media (max-width: 400px) {
+  .inst-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inst-toggle {
+    justify-content: center;
+  }
+}

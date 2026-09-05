@@ -57,6 +57,18 @@ body::before {
   padding: 1.5rem 1rem 3rem;
 }
 
+@media (max-width: 720px) {
+  #root {
+    padding: 0.85rem 0.65rem 2rem;
+  }
+}
+
+@media (max-width: 400px) {
+  #root {
+    padding: 0.55rem 0.45rem 1.5rem;
+  }
+}
+
 button {
   font: inherit;
 }

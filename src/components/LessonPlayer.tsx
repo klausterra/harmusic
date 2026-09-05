@@ -7,7 +7,13 @@ import {
   triadForDegree,
   type Degree,
 } from '../music/theory'
-import { ensureAudioRunning, playMidiNotes, playSequence } from '../audio/synth'
+import { ensureAudioRunning, playMidiNotes, playSequence, setSynthVoice } from '../audio/synth'
+import {
+  loadInstrumentPrefs,
+  resolveVoicing,
+  saveInstrumentPrefs,
+  type InstrumentPrefs,
+} from '../instrument/prefs'
 import {
   awardXp,
   breakCombo,
@@ -23,6 +29,7 @@ import {
 import { useEffect, useMemo, useState } from 'react'
 import { GameHud } from './GameHud'
 import { InstrumentView } from './InstrumentView'
+import { Hint } from './Hint'
 import './LessonFlow.css'
 
 type StepId = 'see' | 'hear' | 'build' | 'find' | 'play'
@@ -99,6 +106,16 @@ export function LessonPlayer({
   const [buildDone, setBuildDone] = useState(false)
   const [findDone, setFindDone] = useState(false)
   const [playDone, setPlayDone] = useState(false)
+  const [prefs, setPrefs] = useState<InstrumentPrefs>(() => loadInstrumentPrefs())
+
+  useEffect(() => {
+    setSynthVoice(instrument)
+  }, [instrument])
+
+  function updatePrefs(next: InstrumentPrefs) {
+    setPrefs(next)
+    saveInstrumentPrefs(next)
+  }
 
   const degrees = useMemo(
     () => getScaleDegrees(lesson.tonic, lesson.mode),
@@ -117,7 +134,7 @@ export function LessonPlayer({
   const uniqueSeq = [...new Set(lesson.sequence)] as Degree[]
   const seeNeeded = uniqueSeq.length
 
-  const targets = isScale
+  const targets = (isScale
     ? scaleNotes.map((midi, i) => ({
         degree: lesson.sequence[i] ?? ((i + 1) as Degree),
         midi: [midi],
@@ -128,21 +145,31 @@ export function LessonPlayer({
         midi: c.midi,
         label: c.label,
       }))
+  ).map((t) => ({
+    ...t,
+    midi: resolveVoicing(instrument, prefs, t.midi),
+  }))
 
   const step = STEPS[stepIndex]
   const findTarget = targets[targetIndex]
   const playTarget = targets[playIndex]
 
+  const styleHint =
+    instrument === 'bass'
+      ? `Baixo · ${prefs.bassFrets} trastes · timbre grave`
+      : instrument === 'piano'
+        ? `Teclado · modo ${prefs.pianoStyle === 'chord' ? 'acorde' : 'solo'}`
+        : `Violão · modo ${prefs.guitarStyle === 'chord' ? 'acorde' : 'solo'}`
+
   const highlighted = useMemo(() => {
     if (step.id === 'see' || step.id === 'hear') {
       if (isScale) return new Set([scaleNotes[focusDegree - 1]])
-      return new Set(
-        triadForDegree(lesson.tonic, focusDegree, 4, lesson.mode).midi,
-      )
+      const triad = triadForDegree(lesson.tonic, focusDegree, 4, lesson.mode).midi
+      return new Set(resolveVoicing(instrument, prefs, triad))
     }
     if (step.id === 'find') return new Set(findTarget.midi)
     return new Set<number>()
-  }, [step.id, focusDegree, findTarget, isScale, scaleNotes, lesson])
+  }, [step.id, focusDegree, findTarget, isScale, scaleNotes, lesson, instrument, prefs])
 
   function reward(
     baseXp: number,
@@ -224,14 +251,31 @@ export function LessonPlayer({
   async function hearDegree(degree: Degree) {
     await ensureAudioRunning()
     setFocusDegree(degree)
-    if (isScale) playMidiNotes([scaleNotes[degree - 1]])
-    else playMidiNotes(triadForDegree(lesson.tonic, degree, 4, lesson.mode).midi)
+    if (isScale) {
+      playMidiNotes([scaleNotes[degree - 1]], 0.9, 0, instrument)
+    } else {
+      const triad = triadForDegree(lesson.tonic, degree, 4, lesson.mode).midi
+      playMidiNotes(resolveVoicing(instrument, prefs, triad), 0.9, 0, instrument)
+    }
   }
 
   async function hearAll(fromStep = true) {
     await ensureAudioRunning()
-    if (isScale) playSequence(scaleNotes.map((n) => [n]), 0.45, 0.4)
-    else playSequence(progression.map((c) => c.midi))
+    if (isScale) {
+      playSequence(
+        scaleNotes.map((n) => [n]),
+        0.45,
+        0.4,
+        instrument,
+      )
+    } else {
+      playSequence(
+        progression.map((c) => resolveVoicing(instrument, prefs, c.midi)),
+        0.95,
+        0.85,
+        instrument,
+      )
+    }
     if (fromStep) {
       setHeard(true)
       reward(15, { hit: true, badge: 'ear_open' })
@@ -264,7 +308,9 @@ export function LessonPlayer({
   }
 
   function toggleKey(midi: number) {
-    void ensureAudioRunning().then(() => playMidiNotes([midi], 0.32))
+    void ensureAudioRunning().then(() =>
+      playMidiNotes([midi], 0.32, 0, instrument),
+    )
     setPressed((prev) => {
       const n = new Set(prev)
       if (n.has(midi)) n.delete(midi)
@@ -401,7 +447,10 @@ export function LessonPlayer({
       <div className="lesson-bar">
         <div className="lesson-bar__meta">
           <strong>{lesson.title}</strong>
-          <span>{instrument}</span>
+          <span>
+            {instrument} · {styleHint}
+            <Hint text="Cada instrumento tem fluxo próprio: teclado/violão (acorde ou solo) e baixo (trastes + som grave)." />
+          </span>
         </div>
         <div className="hearts" aria-label={`${hearts} vidas`}>
           {Array.from({ length: MAX_HEARTS }, (_, i) => (
@@ -551,6 +600,8 @@ export function LessonPlayer({
         <div className="piano-wrap">
           <InstrumentView
             instrument={instrument}
+            prefs={prefs}
+            onPrefsChange={updatePrefs}
             highlighted={highlighted}
             pressed={
               step.id === 'find' || step.id === 'play' ? pressed : new Set()

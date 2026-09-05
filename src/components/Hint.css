@@ -1,0 +1,107 @@
+.hint {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  vertical-align: middle;
+}
+
+.hint__btn {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 230, 184, 0.45);
+  background: rgba(0, 230, 184, 0.1);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0;
+  cursor: help;
+  flex-shrink: 0;
+}
+
+.hint__tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.45rem);
+  transform: translateX(-50%) translateY(4px);
+  width: max(12rem, min(18rem, 70vw));
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 230, 184, 0.28);
+  background: #0a1210;
+  color: #d7ebe2;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 40;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+.hint__tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #0a1210;
+}
+
+.hint:hover .hint__tip,
+.hint:focus-within .hint__tip,
+.hint.is-open .hint__tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.tip-banner {
+  width: 100%;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 230, 184, 0.2);
+  background:
+    linear-gradient(135deg, rgba(0, 230, 184, 0.1), transparent 55%),
+    rgba(8, 12, 16, 0.9);
+  text-align: left;
+}
+
+.tip-banner strong {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+.tip-banner p {
+  margin: 0;
+  color: #9eb0a8;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 720px) {
+  .hint__tip {
+    left: auto;
+    right: 0;
+    transform: translateY(4px);
+  }
+
+  .hint:hover .hint__tip,
+  .hint:focus-within .hint__tip,
+  .hint.is-open .hint__tip {
+    transform: translateY(0);
+  }
+
+  .hint__tip::after {
+    left: auto;
+    right: 0.55rem;
+    transform: none;
+  }
+}

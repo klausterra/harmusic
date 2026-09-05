@@ -17,6 +17,7 @@ import {
   PracticePage,
   ProgressPage,
 } from './pages/Pages'
+import { TheoryPage } from './pages/Theory'
 import { LandingPage, type PlanId } from './pages/Landing'
 import './components/LessonFlow.css'
 
@@ -186,6 +187,7 @@ export default function App() {
         />
       ) : null}
       {route.name === 'progress' ? <ProgressPage cleared={cleared} /> : null}
+      {route.name === 'theory' ? <TheoryPage /> : null}
       {route.name === 'admin' && auth.isAdmin ? <AdminPage /> : null}
     </>,
   )
