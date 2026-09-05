@@ -165,28 +165,46 @@ export function VoiceTunePlayer({
   return (
     <div className="stage voice-stage">
       <GameHud game={game} flashXp={flashXp} newBadge={null} />
-      <section className="panel">
+      <section className="panel panel--lesson">
         <div className="panel__head">
           <p className="panel__kicker">
-            Afinador · {idx + 1}/{DEGREES_TO_SING.length}
+            Canto · {idx + 1} de {DEGREES_TO_SING.length}
           </p>
           <h1>Cante {targetLabel}</h1>
+          <p className="panel__why">
+            Ajuste a voz até o medidor ficar no centro e segure um instante.
+          </p>
           <p className="panel__hint">
-            Ouça a referência e sustente a nota no tom (~{Math.round(theoryMidiToHz(targetMidi))} Hz).
+            Ouça a referência (~{Math.round(theoryMidiToHz(targetMidi))} Hz) e
+            sustente a mesma altura.
           </p>
         </div>
 
         {!ready ? (
-          <div className="actions">
-            <button type="button" className="btn" onClick={() => void enableMic()}>
+          <div className="actions voice-actions">
+            <button
+              type="button"
+              className="btn btn--lg"
+              onClick={() => void enableMic()}
+            >
               Permitir microfone
             </button>
-            {micError ? <p className="feedback feedback--bad">{micError}</p> : null}
+            {micError ? (
+              <p className="feedback feedback--bad">{micError}</p>
+            ) : (
+              <p className="panel__hint">
+                O navegador vai pedir acesso ao microfone — é só para afinar.
+              </p>
+            )}
           </div>
         ) : (
           <>
             <div className="actions">
-              <button type="button" className="btn btn--ghost" onClick={() => void playRef()}>
+              <button
+                type="button"
+                className="btn btn--ghost"
+                onClick={() => void playRef()}
+              >
                 Ouvir referência
               </button>
             </div>

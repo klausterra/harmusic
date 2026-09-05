@@ -37,33 +37,39 @@ type StepId = 'see' | 'hear' | 'build' | 'find' | 'play'
 const STEPS: {
   id: StepId
   title: string
+  why: string
   prompt: (lesson: LessonDef) => string
 }[] = [
   {
     id: 'see',
-    title: 'Ver',
-    prompt: () => 'Toque cada grau abaixo para ouvir. Depois avance automaticamente.',
+    title: 'Ver os graus',
+    why: 'Primeiro reconheça cada símbolo e o som dele.',
+    prompt: () => 'Toque cada grau abaixo. Quando ouvir todos, seguimos sozinhos.',
   },
   {
     id: 'hear',
-    title: 'Ouvir',
-    prompt: () => 'Ouça a sequência completa uma vez.',
+    title: 'Ouvir a sequência',
+    why: 'Grave a progressão no ouvido antes de montar.',
+    prompt: () => 'Ouça a sequência completa uma vez (pode repetir).',
   },
   {
     id: 'build',
-    title: 'Montar',
+    title: 'Montar a ordem',
+    why: 'Prove que você sabe a sequência — sem olhar a resposta.',
     prompt: (l) =>
       `Monte na ordem: ${l.sequence.map((d) => romanFallback(d, l)).join(' → ')}`,
   },
   {
     id: 'find',
-    title: 'Encontrar',
-    prompt: () => 'Ache o alvo no instrumento e toque Checar.',
+    title: 'Encontrar no instrumento',
+    why: 'Localize as notas certas no seu instrumento.',
+    prompt: () => 'Toque as notas destacadas e confirme com Checar.',
   },
   {
     id: 'play',
-    title: 'Tocar',
-    prompt: () => 'Sem destaque. Toque cada alvo e confirme.',
+    title: 'Tocar sem ajuda',
+    why: 'Mesma progressão, agora sem destaque — é o teste final.',
+    prompt: () => 'Sem luzes. Toque cada alvo e confirme.',
   },
 ]
 
@@ -443,13 +449,18 @@ export function LessonPlayer({
   }
 
   return (
-    <div className={`stage ${mood !== 'idle' ? `stage--${mood}` : ''}`}>
+    <div className={`stage stage--lesson ${mood !== 'idle' ? `stage--${mood}` : ''}`}>
       <div className="lesson-bar">
         <div className="lesson-bar__meta">
           <strong>{lesson.title}</strong>
           <span>
-            {instrument} · {styleHint}
-            <Hint text="Cada instrumento tem fluxo próprio: teclado/violão (acorde ou solo) e baixo (trastes + som grave)." />
+            {instrument === 'piano'
+              ? 'Piano'
+              : instrument === 'guitar'
+                ? 'Violão'
+                : 'Baixo'}{' '}
+            · {styleHint}
+            <Hint text="Acorde = tríade completa. Solo = só a nota raiz. No baixo, ajuste os trastes se precisar." />
           </span>
         </div>
         <div className="hearts" aria-label={`${hearts} vidas`}>
@@ -480,17 +491,18 @@ export function LessonPlayer({
               .join(' ')}
           >
             <span>{String(i + 1).padStart(2, '0')}</span>
-            {s.title}
+            {s.title.split(' ')[0]}
           </li>
         ))}
       </ol>
 
-      <section className="panel">
+      <section className="panel panel--lesson">
         <div className="panel__head">
           <p className="panel__kicker">
-            Etapa {stepIndex + 1}/{STEPS.length}
+            Etapa {stepIndex + 1} de {STEPS.length}
           </p>
           <h1>{step.title}</h1>
+          <p className="panel__why">{step.why}</p>
           <p className="panel__hint" data-testid="lesson-prompt">
             {step.id === 'find'
               ? `Alvo agora: ${findTarget.label}. ${step.prompt(lesson)}`

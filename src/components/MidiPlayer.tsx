@@ -46,7 +46,7 @@ import type {
   PlaybackRate,
 } from '../midi/types'
 import { GameHud } from './GameHud'
-import { Hint, TipBanner } from './Hint'
+import { Hint } from './Hint'
 import { InstrumentView } from './InstrumentView'
 import './MidiPlayer.css'
 import './LessonFlow.css'
@@ -347,30 +347,64 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
     >
       <header className="midi-player__head">
         <div>
-          <p className="page__kicker">MIDI</p>
+          <p className="page__kicker">suas músicas</p>
           <h1 className="page__hero">
-            Toque o arquivo
-            <Hint text="O instrumento do seletor acima define o visual e o input dos modos game." />
+            Pratique com MIDI
+            <Hint text="O instrumento do topo define o visual e o toque nos modos de jogo." />
           </h1>
-          <p className="page__lead">
-            Envie um .mid, ouça no {instrument} e treine nos modos game.
+          <p className="page__lead page__lead--wide">
+            Carregue um arquivo, veja as notas no{' '}
+            {instrument === 'piano'
+              ? 'piano'
+              : instrument === 'guitar'
+                ? 'violão'
+                : 'baixo'}{' '}
+            e treine no ritmo.
           </p>
         </div>
         <GameHud game={game} flashXp={flashXp} newBadge={newBadge} />
       </header>
 
-      <TipBanner
-        title="O que fazer aqui"
-        body="1) Abra um exemplo ou envie um .mid. 2) Escolha o modo (Ouvir, Rhythm, Follow, Karaoke). 3) Dê Play e siga as notas no instrumento selecionado."
-      />
+      {!parsed ? (
+        <div className="midi-empty">
+          <p className="midi-empty__title">Comece por um exemplo</p>
+          <p className="midi-empty__lead">
+            Ou envie seu .mid — sem instalação, tudo no navegador.
+          </p>
+          <div className="midi-empty__grid">
+            {MIDI_EXAMPLES.map((ex) => (
+              <button
+                key={ex.id}
+                type="button"
+                className="midi-empty__card"
+                data-testid={`midi-example-${ex.id}`}
+                onClick={() => void loadExample(ex.url, ex.title)}
+              >
+                <strong>{ex.title}</strong>
+                <span>Abrir e tocar</span>
+              </button>
+            ))}
+            <label className="midi-empty__card midi-empty__card--upload">
+              <strong>Enviar meu MIDI</strong>
+              <span>Arquivo .mid / .midi</span>
+              <input
+                type="file"
+                accept=".mid,.midi,audio/midi,audio/x-midi"
+                data-testid="midi-upload"
+                onChange={(e) => void onUpload(e.target.files?.[0] ?? null)}
+              />
+            </label>
+          </div>
+        </div>
+      ) : null}
 
+      {parsed ? (
       <div className="midi-player__sources">
-        <label className="midi-player__upload btn">
-          Enviar MIDI
+        <label className="midi-player__upload btn btn--ghost">
+          Trocar arquivo
           <input
             type="file"
             accept=".mid,.midi,audio/midi,audio/x-midi"
-            data-testid="midi-upload"
             onChange={(e) => void onUpload(e.target.files?.[0] ?? null)}
           />
         </label>
@@ -380,7 +414,6 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
               key={ex.id}
               type="button"
               className="btn btn--ghost"
-              data-testid={`midi-example-${ex.id}`}
               onClick={() => void loadExample(ex.url, ex.title)}
             >
               {ex.title}
@@ -388,6 +421,7 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
           ))}
         </div>
       </div>
+      ) : null}
 
       {loading ? <p className="shell__muted">Carregando…</p> : null}
       {error ? (
@@ -436,12 +470,12 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
           <div className="midi-player__modes" role="group" aria-label="Modo">
             {(
               [
-                ['listen', 'Ouvir'],
-                ['rhythm', 'Rhythm'],
-                ['follow-along', 'Follow'],
-                ['karaoke', 'Karaoke'],
+                ['listen', 'Ouvir', 'Só escuta e destaca'],
+                ['rhythm', 'Ritmo', 'Toque no tempo'],
+                ['follow-along', 'Seguir', 'Antecipa a nota'],
+                ['karaoke', 'Livre', 'Toque junto e score no fim'],
               ] as const
-            ).map(([id, label]) => (
+            ).map(([id, label, blurb]) => (
               <button
                 key={id}
                 type="button"
@@ -449,15 +483,26 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
                 data-testid={`midi-mode-${id}`}
                 onClick={() => changeMode(id)}
               >
-                {label}
+                <strong>{label}</strong>
+                <span>{blurb}</span>
               </button>
             ))}
           </div>
 
+          <p className="midi-player__mode-hint">
+            {mode === 'listen'
+              ? 'Dê Play e acompanhe as notas acesas.'
+              : mode === 'rhythm'
+                ? 'Quando a nota chegar, toque no instrumento — timing conta.'
+                : mode === 'follow-along'
+                  ? 'As próximas notas acendem cedo; toque o pitch certo.'
+                  : 'Toque junto livremente; no fim medimos quantas notas você cobriu.'}
+          </p>
+
           <div className="midi-player__transport">
             <button
               type="button"
-              className="btn"
+              className="btn btn--lg"
               data-testid="midi-play"
               onClick={() => void togglePlay()}
             >
@@ -498,7 +543,7 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
           {mode !== 'listen' ? (
             <p className="midi-player__scoreline">
               Acertos {hitIds.size}/{notes.length}
-              {misses ? ` · misses ${misses}` : ''}
+              {misses ? ` · erros ${misses}` : ''}
               {finishedScore !== null ? ` · score final ${finishedScore}%` : ''}
             </p>
           ) : null}
@@ -515,11 +560,7 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
             pianoRange={instrument === 'piano' ? pianoRange : undefined}
           />
         </>
-      ) : (
-        <p className="page__lead">
-          Escolha um exemplo ou envie um arquivo .mid / .midi para começar.
-        </p>
-      )}
+      ) : null}
     </section>
   )
 }

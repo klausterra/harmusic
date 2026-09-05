@@ -32,9 +32,7 @@ export function Hint({
           setOpen((v) => !v)
         }}
         onBlur={() => setOpen(false)}
-      >
-        ?
-      </button>
+      />
       <span id={id} role="tooltip" className="hint__tip">
         {text}
       </span>
