@@ -190,22 +190,32 @@ export function VoiceKaraokePlayer({
   return (
     <div className="stage voice-stage">
       <GameHud game={game} flashXp={null} newBadge={null} />
-      <section className="panel">
+      <section className="panel panel--lesson">
         <div className="panel__head">
-          <p className="panel__kicker">Karaoke harmônico</p>
+          <p className="panel__kicker">Canto · karaoke</p>
           <h1>{lesson.title}</h1>
+          <p className="panel__why">
+            A harmonia toca; você canta só a nota base de cada acorde.
+          </p>
           <p className="panel__hint">
-            Cante a <strong>fundamental</strong> de cada acorde enquanto a
-            progressão toca.
+            Cante a <strong>fundamental</strong> no tempo da progressão.
           </p>
         </div>
 
         {phase === 'idle' ? (
-          <div className="actions">
-            <button type="button" className="btn" onClick={() => void start()}>
+          <div className="actions voice-actions">
+            <button
+              type="button"
+              className="btn btn--lg"
+              onClick={() => void start()}
+            >
               Começar (microfone)
             </button>
-            {micError ? <p className="feedback feedback--bad">{micError}</p> : null}
+            {micError ? (
+              <p className="feedback feedback--bad">{micError}</p>
+            ) : (
+              <p className="panel__hint">Precisamos do microfone só nesta tela.</p>
+            )}
           </div>
         ) : (
           <>
