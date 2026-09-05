@@ -42,8 +42,7 @@ export function useInstallPwa() {
 
   useEffect(() => {
     function onBip(e: Event) {
-      // Prevent default mini-infobar and save event for native install trigger
-      e.preventDefault()
+      // Do NOT preventDefault() if we want Chrome's native mini-infobar / ambient prompt to appear automatically
       setDeferred(e as BeforeInstallPromptEvent)
     }
     function onInstalled() {
