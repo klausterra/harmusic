@@ -28,7 +28,7 @@ interface AppShellProps {
 
 const PRIMARY_NAV = [
   { id: 'home' as const, label: 'Início', title: 'Propósito, próxima lição e trilha' },
-  { id: 'voice' as const, label: 'Canto', title: 'Afinador e karaoke de voz' },
+  { id: 'voice' as const, label: 'Voz', title: 'Menu só de canto: afinador e karaoke' },
   { id: 'midi' as const, label: 'MIDI', title: 'Treinar com arquivos MIDI' },
   { id: 'progress' as const, label: 'Progresso', title: 'XP e unidades' },
 ]
@@ -54,11 +54,18 @@ export function AppShell({
     route.name === 'play' ||
     route.name === 'voice-tune' ||
     route.name === 'voice-karaoke'
+  const voiceShell =
+    route.name === 'voice' ||
+    route.name === 'voice-tune' ||
+    route.name === 'voice-karaoke'
+  const showInstruments = !focusMode && !voiceShell
 
   const moreActive = MORE_NAV.some((n) => n.id === route.name)
 
   return (
-    <div className={`shell${focusMode ? ' shell--focus' : ''}`}>
+    <div
+      className={`shell${focusMode ? ' shell--focus' : ''}${voiceShell ? ' shell--voice' : ''}`}
+    >
       <header className="shell__top">
         <button
           type="button"
@@ -71,9 +78,18 @@ export function AppShell({
           <button
             type="button"
             className="btn btn--ghost btn--sm"
-            onClick={() => onNavigate({ name: 'home' })}
+            onClick={() =>
+              onNavigate({
+                name:
+                  route.name === 'voice-tune' || route.name === 'voice-karaoke'
+                    ? 'voice'
+                    : 'home',
+              })
+            }
           >
-            Voltar ao início
+            {route.name === 'voice-tune' || route.name === 'voice-karaoke'
+              ? 'Menu voz'
+              : 'Voltar ao início'}
           </button>
         ) : (
           <>
@@ -169,11 +185,11 @@ export function AppShell({
         )}
       </header>
 
-      {!focusMode ? (
+      {showInstruments ? (
         <div className="shell__instruments" role="group" aria-label="Instrumento">
           <div className="shell__instruments-label">
             <span>Seu instrumento</span>
-            <small>Lições e MIDI · canto usa o microfone</small>
+            <small>Lições e MIDI · voz tem menu próprio</small>
           </div>
           {INSTRUMENTS.map((ins) => (
             <button
@@ -190,6 +206,21 @@ export function AppShell({
         </div>
       ) : null}
 
+      {route.name === 'voice' ? (
+        <nav className="shell__voice-nav" aria-label="Menu voz">
+          <span className="shell__voice-nav-label">Menu voz</span>
+          <a className="shell__voice-nav-item is-active" href="#voice-menu-afinador">
+            Afinador
+          </a>
+          <a className="shell__voice-nav-item" href="#voice-menu-karaoke">
+            Karaoke
+          </a>
+          <a className="shell__voice-nav-item" href="#voice-menu-todos">
+            Todos
+          </a>
+        </nav>
+      ) : null}
+
       <main className="shell__main">{children}</main>
 
       {!focusMode ? (
@@ -197,7 +228,7 @@ export function AppShell({
           <span>
             {cleared.length}/{pathTotal} concluídos
           </span>
-          <span>uma lição por vez</span>
+          <span>{voiceShell ? 'só voz · microfone' : 'uma lição por vez'}</span>
         </footer>
       ) : null}
     </div>

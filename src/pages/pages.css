@@ -120,6 +120,75 @@
   gap: 0.85rem;
 }
 
+.voice-menu-doors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.voice-menu-door {
+  display: grid;
+  gap: 0.45rem;
+  text-align: left;
+  padding: 1.35rem 1.2rem;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 255, 200, 0.18);
+  background: rgba(8, 14, 16, 0.82);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.voice-menu-door:hover:not(:disabled) {
+  border-color: rgba(0, 230, 184, 0.5);
+  transform: translateY(-2px);
+}
+
+.voice-menu-door:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.voice-menu-door em {
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.voice-menu-door strong {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.voice-menu-door span {
+  color: #9eb0a8;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.voice-menu-section {
+  display: grid;
+  gap: 0.65rem;
+  scroll-margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.voice-menu-section h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.voice-menu-section > p {
+  margin: 0;
+  color: #9eb0a8;
+}
+
 .voice-card {
   width: 100%;
   display: grid;
@@ -321,7 +390,8 @@
 }
 
 @media (max-width: 860px) {
-  .hub-doors {
+  .hub-doors,
+  .voice-menu-doors {
     grid-template-columns: 1fr;
   }
 

@@ -100,12 +100,12 @@ export function HomePage({
           data-testid="hub-door-voice"
           onClick={() => onNavigate({ name: 'voice' })}
         >
-          <em>02 · canto</em>
-          <strong>Treinar a voz</strong>
+          <em>02 · voz</em>
+          <strong>Menu voz</strong>
           <span>
             {nextVoice
-              ? `Disponível: ${nextVoice.title}`
-              : 'Afinador de graus e karaoke da progressão — quando a trilha liberar.'}
+              ? `Afinador e karaoke · próximo: ${nextVoice.title}`
+              : 'Só microfone: afinador de graus e karaoke da progressão.'}
           </span>
         </button>
         <button
@@ -190,35 +190,21 @@ export function VoicePage({
   onOpenNode: (node: PathNode) => void
 }) {
   const nodes = voicePathNodes()
+  const tuneNodes = nodes.filter((n) => n.kind === 'voice-tune')
+  const karaokeNodes = nodes.filter((n) => n.kind === 'voice-karaoke')
   const next = nextVoiceNode(cleared)
+  const nextTune = tuneNodes.find((n) => nodeStatus(n.id, cleared) !== 'locked')
+  const nextKaraoke = karaokeNodes.find(
+    (n) => nodeStatus(n.id, cleared) !== 'locked',
+  )
 
-  return (
-    <section className="page page--voice-hub" data-testid="voice-page">
-      <p className="page__kicker">canto</p>
-      <h1 className="page__hero">Treine a voz</h1>
-      <p className="page__lead page__lead--wide">
-        Cante graus com o afinador ou acompanhe a progressão no tempo. Precisa
-        liberar o microfone do navegador.
-      </p>
-
-      {next ? (
-        <button
-          type="button"
-          className="btn btn--lg"
-          data-testid="cta-voice-next"
-          onClick={() => onOpenNode(next)}
-        >
-          Próximo canto: {next.title}
-        </button>
-      ) : (
-        <p className="page__lead">
-          Todos os nós de voz desta trilha estão concluídos ou ainda bloqueados
-          — avance nas lições de instrumento no Início.
-        </p>
-      )}
-
+  function renderList(list: PathNode[], empty: string) {
+    if (list.length === 0) {
+      return <p className="page__lead">{empty}</p>
+    }
+    return (
       <ul className="voice-list">
-        {nodes.map((node) => {
+        {list.map((node) => {
           const status = nodeStatus(node.id, cleared)
           return (
             <li key={node.id}>
@@ -238,7 +224,7 @@ export function VoicePage({
                     ? 'Afinador de graus'
                     : 'Karaoke harmônico'}
                   {status === 'locked'
-                    ? ' · bloqueado — conclua a lição anterior na trilha'
+                    ? ' · bloqueado na trilha — avance no Início'
                     : status === 'cleared'
                       ? ' · concluído'
                       : ' · liberado'}
@@ -248,6 +234,80 @@ export function VoicePage({
           )
         })}
       </ul>
+    )
+  }
+
+  return (
+    <section className="page page--voice-hub" data-testid="voice-page">
+      <header className="hub-hero">
+        <p className="page__kicker">menu voz</p>
+        <h1 className="page__hero">Só canto</h1>
+        <p className="page__lead page__lead--wide">
+          Aqui não há piano, violão nem baixo — só microfone. Escolha afinador
+          ou karaoke.
+        </p>
+        {next ? (
+          <button
+            type="button"
+            className="btn btn--lg"
+            data-testid="cta-voice-next"
+            onClick={() => onOpenNode(next)}
+          >
+            Continuar: {next.title}
+          </button>
+        ) : null}
+      </header>
+
+      <div className="voice-menu-doors" aria-label="Tipos de exercício">
+        <button
+          type="button"
+          className="voice-menu-door"
+          data-testid="voice-menu-open-tune"
+          disabled={!nextTune}
+          onClick={() => nextTune && onOpenNode(nextTune)}
+        >
+          <em>01</em>
+          <strong>Afinador</strong>
+          <span>
+            {nextTune
+              ? `Abrir: ${nextTune.title}`
+              : 'Nenhum afinador liberado ainda — avance a trilha no Início.'}
+          </span>
+        </button>
+        <button
+          type="button"
+          className="voice-menu-door"
+          data-testid="voice-menu-open-karaoke"
+          disabled={!nextKaraoke}
+          onClick={() => nextKaraoke && onOpenNode(nextKaraoke)}
+        >
+          <em>02</em>
+          <strong>Karaoke</strong>
+          <span>
+            {nextKaraoke
+              ? `Abrir: ${nextKaraoke.title}`
+              : 'Nenhum karaoke liberado ainda — conclua I–IV–V–I e o afinador.'}
+          </span>
+        </button>
+      </div>
+
+      <section id="voice-menu-afinador" className="voice-menu-section">
+        <h2>Afinador</h2>
+        <p>Cante um grau e segure no tom com o medidor.</p>
+        {renderList(tuneNodes, 'Nenhum exercício de afinador no catálogo.')}
+      </section>
+
+      <section id="voice-menu-karaoke" className="voice-menu-section">
+        <h2>Karaoke</h2>
+        <p>A progressão toca; você canta a fundamental de cada acorde.</p>
+        {renderList(karaokeNodes, 'Nenhum karaoke no catálogo.')}
+      </section>
+
+      <section id="voice-menu-todos" className="voice-menu-section">
+        <h2>Todos</h2>
+        <p>Lista completa do menu voz.</p>
+        {renderList(nodes, 'Nenhum exercício de voz.')}
+      </section>
     </section>
   )
 }
