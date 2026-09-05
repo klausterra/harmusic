@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildMajorScale,
+  buildProgression,
+  buildScale,
   getScaleDegrees,
   midiMatchesChord,
   pitchClassesMatch,
@@ -31,6 +33,25 @@ describe('major scale', () => {
       'E',
       'F#',
     ])
+  })
+})
+
+describe('minor and progression builder', () => {
+  it('builds A natural minor', () => {
+    expect(buildScale('A', 'minor')).toEqual([
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+    ])
+  })
+
+  it('builds custom progression', () => {
+    const prog = buildProgression('C', [2, 5, 1], 'major')
+    expect(prog.map((c) => c.root)).toEqual(['D', 'G', 'C'])
   })
 })
 

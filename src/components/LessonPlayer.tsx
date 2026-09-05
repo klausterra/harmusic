@@ -1,4 +1,12 @@
-import { useMemo, useState } from 'react'
+import type { InstrumentId, LessonDef } from '../catalog/lessons'
+import {
+  buildProgression,
+  getScaleDegrees,
+  pitchClassesMatch,
+  scaleMidiNotes,
+  triadForDegree,
+  type Degree,
+} from '../music/theory'
 import { ensureAudioRunning, playMidiNotes, playSequence } from '../audio/synth'
 import {
   awardXp,
@@ -12,107 +20,128 @@ import {
   type BadgeId,
   type GameState,
 } from '../game/progress'
-import {
-  getScaleDegrees,
-  pitchClassesMatch,
-  progressionIVVI,
-  triadForDegree,
-  type Degree,
-} from '../music/theory'
+import { useMemo, useState } from 'react'
 import { GameHud } from './GameHud'
-import { PianoKeyboard } from './PianoKeyboard'
+import { InstrumentView } from './InstrumentView'
 import './LessonFlow.css'
 
-const TONIC = 'C' as const
 type StepId = 'see' | 'hear' | 'build' | 'find' | 'play'
 
-const STEPS: {
-  id: StepId
-  title: string
-  hint: string
-  cta: string
-}[] = [
+const STEPS: { id: StepId; title: string; hint: string; cta: string }[] = [
   {
     id: 'see',
-    title: 'Ver o grau',
-    hint: 'Cada número romano é um lugar na tonalidade. Toque e sinta a cor do acorde.',
-    cta: 'Explorar graus',
+    title: 'Ver',
+    hint: 'Olhe o grau / nota e ouça a sonoridade.',
+    cta: 'Reconhecer',
   },
   {
     id: 'hear',
     title: 'Ouvir',
-    hint: 'Grave o movimento I → IV → V → I. O ouvido guia o dedo.',
-    cta: 'Ouvir progressão',
+    hint: 'Grave o movimento na memória auditiva.',
+    cta: 'Escuta ativa',
   },
   {
     id: 'build',
     title: 'Montar',
-    hint: 'Escolha os graus na ordem certa. Ritmo mental > pressa.',
+    hint: 'Monte a sequência na ordem certa.',
     cta: 'Sequenciar',
   },
   {
     id: 'find',
     title: 'Encontrar',
-    hint: 'Três notas no piano. Qualquer oitava vale — foque nas classes de altura.',
-    cta: 'Localizar no teclado',
+    hint: 'Ache no instrumento (qualquer oitava / casa).',
+    cta: 'Localizar',
   },
   {
     id: 'play',
-    title: 'Tocar livre',
-    hint: 'Sem luzes. Você é o metrônomo. Toque a progressão completa.',
+    title: 'Tocar',
+    hint: 'Sem destaque. Você conduz.',
     cta: 'Performance',
   },
 ]
 
-export function LessonFlow() {
+interface LessonPlayerProps {
+  lesson: LessonDef
+  instrument: InstrumentId
+  onExit: () => void
+  onCleared?: (lessonId: string) => void
+}
+
+export function LessonPlayer({
+  lesson,
+  instrument,
+  onExit,
+  onCleared,
+}: LessonPlayerProps) {
   const [stepIndex, setStepIndex] = useState(0)
   const [focusDegree, setFocusDegree] = useState<Degree>(1)
   const [buildPicks, setBuildPicks] = useState<Degree[]>([])
   const [pressed, setPressed] = useState<Set<number>>(() => new Set())
-  const [findTargetIndex, setFindTargetIndex] = useState(0)
+  const [targetIndex, setTargetIndex] = useState(0)
   const [playIndex, setPlayIndex] = useState(0)
   const [feedback, setFeedback] = useState<string | null>(null)
   const [mood, setMood] = useState<'idle' | 'good' | 'bad' | 'win'>('idle')
-  const [game, setGame] = useState<GameState>(() => defaultSafeGame())
+  const [game, setGame] = useState<GameState>(() => loadGame())
   const [flashXp, setFlashXp] = useState<number | null>(null)
   const [newBadge, setNewBadge] = useState<BadgeId | null>(null)
-  const [seenDegrees, setSeenDegrees] = useState(false)
-  const [heardProg, setHeardProg] = useState(false)
+  const [seen, setSeen] = useState(false)
+  const [heard, setHeard] = useState(false)
   const [celebrate, setCelebrate] = useState(false)
 
-  const degrees = useMemo(() => getScaleDegrees(TONIC), [])
-  const progression = useMemo(() => progressionIVVI(TONIC), [])
+  const degrees = useMemo(
+    () => getScaleDegrees(lesson.tonic, lesson.mode),
+    [lesson.tonic, lesson.mode],
+  )
+  const progression = useMemo(
+    () => buildProgression(lesson.tonic, lesson.sequence, lesson.mode),
+    [lesson],
+  )
+  const scaleNotes = useMemo(
+    () => scaleMidiNotes(lesson.tonic, lesson.mode),
+    [lesson.tonic, lesson.mode],
+  )
+
+  const isScale = lesson.kind === 'scale'
+  const targets = isScale
+    ? scaleNotes.map((midi, i) => ({
+        degree: lesson.sequence[i] ?? ((i + 1) as Degree),
+        midi: [midi],
+        label: degrees[i]?.roman ?? String(i + 1),
+      }))
+    : progression.map((c) => ({
+        degree: c.degree,
+        midi: c.midi,
+        label: c.label,
+      }))
+
   const step = STEPS[stepIndex]
-  const targetChord = progression[findTargetIndex]
-  const playTarget = progression[playIndex]
-  const progressPct = ((stepIndex + (mood === 'win' ? 1 : 0)) / STEPS.length) * 100
+  const findTarget = targets[targetIndex]
+  const playTarget = targets[playIndex]
 
   const highlighted = useMemo(() => {
     if (step.id === 'see' || step.id === 'hear') {
-      return new Set(triadForDegree(TONIC, focusDegree).midi)
+      if (isScale) return new Set([scaleNotes[focusDegree - 1]])
+      return new Set(triadForDegree(lesson.tonic, focusDegree, 4, lesson.mode).midi)
     }
-    if (step.id === 'find') {
-      return new Set(targetChord.midi)
-    }
+    if (step.id === 'find') return new Set(findTarget.midi)
     return new Set<number>()
-  }, [step.id, focusDegree, targetChord])
+  }, [step.id, focusDegree, findTarget, isScale, scaleNotes, lesson])
 
   function reward(
     baseXp: number,
     opts: { hit?: boolean; miss?: boolean; badge?: BadgeId } = {},
   ) {
     setGame((prev) => {
-      const touched = touchStreak(prev)
-      let next = touched
+      let next = touchStreak(prev)
       if (opts.miss) next = breakCombo(next)
       if (opts.hit) next = hitCombo(next)
       const beforeXp = next.xp
       next = awardXp(next, baseXp)
       const unlocked: BadgeId[] = []
       const tryBadge = (id: BadgeId) => {
-        const before = next.badges.length
+        const n = next.badges.length
         next = unlockBadge(next, id)
-        if (next.badges.length > before) unlocked.push(id)
+        if (next.badges.length > n) unlocked.push(id)
       }
       if (opts.badge) tryBadge(opts.badge)
       if (next.combo >= 3) tryBadge('combo_3')
@@ -139,51 +168,53 @@ export function LessonFlow() {
     window.setTimeout(() => setMood((m) => (m === kind ? 'idle' : m)), 700)
   }
 
-  function resetStepState() {
+  function resetStep() {
     setBuildPicks([])
     setPressed(new Set())
-    setFindTargetIndex(0)
+    setTargetIndex(0)
     setPlayIndex(0)
     setFeedback(null)
     setFocusDegree(1)
     setMood('idle')
   }
 
-  function goTo(index: number) {
-    setStepIndex(index)
-    resetStepState()
+  function goTo(i: number) {
+    setStepIndex(i)
+    resetStep()
   }
 
-  async function hearChord(degree: Degree) {
+  async function hearDegree(degree: Degree) {
     await ensureAudioRunning()
     setFocusDegree(degree)
-    playMidiNotes(triadForDegree(TONIC, degree).midi)
+    if (isScale) playMidiNotes([scaleNotes[degree - 1]])
+    else playMidiNotes(triadForDegree(lesson.tonic, degree, 4, lesson.mode).midi)
   }
 
-  async function hearProgression(fromStep = true) {
+  async function hearAll(fromStep = true) {
     await ensureAudioRunning()
-    playSequence(progression.map((c) => c.midi))
+    if (isScale) playSequence(scaleNotes.map((n) => [n]), 0.45, 0.4)
+    else playSequence(progression.map((c) => c.midi))
     if (fromStep) {
-      setHeardProg(true)
+      setHeard(true)
       reward(15, { hit: true, badge: 'ear_open' })
       pulse('good')
-      setFeedback('Progressão na memória. Siga para montar.')
+      setFeedback('Sequência na memória.')
     }
   }
 
   function pickBuild(degree: Degree) {
     const next = [...buildPicks, degree]
     setBuildPicks(next)
-    void hearChord(degree)
-    const expected = progression.map((c) => c.degree)
+    void hearDegree(degree)
+    const expected = lesson.sequence
     if (next.length === expected.length) {
       const ok = next.every((d, i) => d === expected[i])
       if (ok) {
-        setFeedback('Sequência perfeita. Vai pro instrumento.')
+        setFeedback('Ordem correta.')
         reward(40, { hit: true, badge: 'builder' })
         pulse('good')
       } else {
-        setFeedback('Quase — limpe e refaça o caminho I–IV–V–I.')
+        setFeedback('Ordem errada — tente de novo.')
         reward(2, { miss: true })
         pulse('bad')
         window.setTimeout(() => setBuildPicks([]), 650)
@@ -194,28 +225,28 @@ export function LessonFlow() {
   function toggleKey(midi: number) {
     void ensureAudioRunning().then(() => playMidiNotes([midi], 0.32))
     setPressed((prev) => {
-      const next = new Set(prev)
-      if (next.has(midi)) next.delete(midi)
-      else next.add(midi)
-      return next
+      const n = new Set(prev)
+      if (n.has(midi)) n.delete(midi)
+      else n.add(midi)
+      return n
     })
   }
 
   function checkFind() {
-    if (pitchClassesMatch(pressed, targetChord.midi)) {
-      if (findTargetIndex >= progression.length - 1) {
-        setFeedback('Mapa completo. Hora de tocar sem luzes.')
+    if (pitchClassesMatch(pressed, findTarget.midi)) {
+      if (targetIndex >= targets.length - 1) {
+        setFeedback('Mapa completo.')
         reward(50, { hit: true, badge: 'finder' })
         pulse('good')
       } else {
-        setFeedback(`+ ${targetChord.label} · próximo acorde`)
+        setFeedback(`+ ${findTarget.label}`)
         reward(20, { hit: true })
         pulse('good')
-        setFindTargetIndex((i) => i + 1)
+        setTargetIndex((i) => i + 1)
         setPressed(new Set())
       }
     } else {
-      setFeedback('Ouça de novo as notas destacadas e ajuste.')
+      setFeedback('Ajuste as notas.')
       reward(1, { miss: true })
       pulse('bad')
     }
@@ -223,69 +254,73 @@ export function LessonFlow() {
 
   function checkPlay() {
     if (pitchClassesMatch(pressed, playTarget.midi)) {
-      if (playIndex >= progression.length - 1) {
-        setFeedback('Clear! Você tocou I–IV–V–I sem auxílio.')
+      if (playIndex >= targets.length - 1) {
+        setFeedback('Clear!')
         setGame((prev) => {
           let next = touchStreak(prev)
           next = hitCombo(next)
-          next = awardXp(next, 80)
+          next = awardXp(next, lesson.xpReward)
           next = unlockBadge(next, 'freestyle')
           next = unlockBadge(next, 'lesson_clear')
           next = clearLesson(next)
           saveGame(next)
           queueMicrotask(() => {
-            setFlashXp(80)
+            setFlashXp(lesson.xpReward)
             setNewBadge('lesson_clear')
             window.setTimeout(() => setFlashXp(null), 800)
             window.setTimeout(() => setNewBadge(null), 3200)
           })
           return next
         })
+        onCleared?.(lesson.id)
         setMood('win')
         setCelebrate(true)
         window.setTimeout(() => setCelebrate(false), 2800)
       } else {
-        setFeedback(`Segura o flow · ${progression[playIndex + 1].label}`)
+        setFeedback(`Segue · ${targets[playIndex + 1].label}`)
         reward(25, { hit: true })
         pulse('good')
         setPlayIndex((i) => i + 1)
         setPressed(new Set())
       }
     } else {
-      setFeedback('Respira. Ouça a referência e tente o acorde atual.')
+      setFeedback('Ouça a referência e tente de novo.')
       reward(1, { miss: true })
       pulse('bad')
     }
   }
 
   const buildDone =
-    buildPicks.length === progression.length &&
-    buildPicks.every((d, i) => d === progression[i].degree)
+    buildPicks.length === lesson.sequence.length &&
+    buildPicks.every((d, i) => d === lesson.sequence[i])
   const findDone = Boolean(feedback?.includes('Mapa completo'))
   const playDone = Boolean(feedback?.includes('Clear'))
-
   const canAdvance =
     stepIndex < STEPS.length - 1 &&
-    ((step.id === 'see' && seenDegrees) ||
-      (step.id === 'hear' && heardProg) ||
+    ((step.id === 'see' && seen) ||
+      (step.id === 'hear' && heard) ||
       (step.id === 'build' && buildDone) ||
-      (step.id === 'find' && findDone) ||
-      step.id === 'play')
+      (step.id === 'find' && findDone))
+
+  const buildChoices = (
+    isScale ? lesson.sequence : ([...new Set(lesson.sequence)] as Degree[])
+  )
 
   return (
     <div className={`stage ${mood !== 'idle' ? `stage--${mood}` : ''}`}>
       {celebrate ? <div className="stage__burst" aria-hidden /> : null}
 
-      <header className="brand">
-        <p className="brand__mark">Harmusic</p>
-        <p className="brand__line">treino harmônico · piano</p>
-      </header>
+      <div className="lesson-bar">
+        <button type="button" className="btn btn--ghost" onClick={onExit}>
+          ← Catálogo
+        </button>
+        <div className="lesson-bar__meta">
+          <strong>{lesson.title}</strong>
+          <span>{instrument}</span>
+        </div>
+      </div>
 
       <GameHud game={game} flashXp={flashXp} newBadge={newBadge} />
-
-      <div className="rail" aria-hidden>
-        <i style={{ width: `${Math.min(progressPct, 100)}%` }} />
-      </div>
 
       <nav className="steps" aria-label="Etapas">
         {STEPS.map((s, i) => (
@@ -307,139 +342,91 @@ export function LessonFlow() {
         ))}
       </nav>
 
-      <section className="panel" aria-labelledby="step-title">
+      <section className="panel">
         <div className="panel__head">
           <p className="panel__kicker">{step.cta}</p>
-          <h1 id="step-title">{step.title}</h1>
+          <h1>{step.title}</h1>
           <p className="panel__hint">{step.hint}</p>
         </div>
 
         {step.id === 'see' ? (
           <div className="degrees">
-            {degrees.map((d) => (
-              <button
-                key={d.degree}
-                type="button"
-                className={
-                  focusDegree === d.degree ? 'chip is-active' : 'chip'
-                }
-                onClick={() => {
-                  setSeenDegrees(true)
-                  void hearChord(d.degree)
-                  if (d.degree === 1) {
-                    reward(10, { hit: true, badge: 'first_note' })
-                  } else {
-                    reward(6, { hit: true })
-                  }
-                }}
-              >
-                <strong>{d.roman}</strong>
-                <span>{d.root}</span>
-              </button>
-            ))}
+            {degrees
+              .filter((d) => lesson.sequence.includes(d.degree))
+              .map((d) => (
+                <button
+                  key={d.degree}
+                  type="button"
+                  className={focusDegree === d.degree ? 'chip is-active' : 'chip'}
+                  onClick={() => {
+                    setSeen(true)
+                    void hearDegree(d.degree)
+                    reward(d.degree === 1 ? 10 : 6, {
+                      hit: true,
+                      badge: d.degree === 1 ? 'first_note' : undefined,
+                    })
+                  }}
+                >
+                  <strong>{d.roman}</strong>
+                  <span>{d.root}</span>
+                </button>
+              ))}
           </div>
         ) : null}
 
         {step.id === 'hear' ? (
           <div className="actions">
-            <button
-              type="button"
-              className="btn"
-              onClick={() => void hearProgression(true)}
-            >
-              Play I–IV–V–I
+            <button type="button" className="btn" onClick={() => void hearAll(true)}>
+              Ouvir sequência
             </button>
-            {progression.map((c) => (
-              <button
-                key={`${c.degree}-${c.label}`}
-                type="button"
-                className="btn btn--ghost"
-                onClick={() => void hearChord(c.degree)}
-              >
-                {c.label}
-              </button>
-            ))}
           </div>
         ) : null}
 
         {step.id === 'build' ? (
           <div className="build">
-            <div className="slots" aria-live="polite">
-              {progression.map((c, i) => {
+            <div className="slots">
+              {lesson.sequence.map((deg, i) => {
                 const pick = buildPicks[i]
                 return (
-                  <span
-                    key={`${c.degree}-${i}`}
-                    className={pick ? 'slot is-filled' : 'slot'}
-                  >
+                  <span key={`${deg}-${i}`} className={pick ? 'slot is-filled' : 'slot'}>
                     {pick ? degrees[pick - 1].roman : '·'}
                   </span>
                 )
               })}
             </div>
             <div className="degrees">
-              {([1, 4, 5] as Degree[]).map((d) => (
-                <button
-                  key={d}
-                  type="button"
-                  className="chip"
-                  onClick={() => pickBuild(d)}
-                >
+              {buildChoices.map((d) => (
+                <button key={d} type="button" className="chip" onClick={() => pickBuild(d)}>
                   <strong>{degrees[d - 1].roman}</strong>
                   <span>{degrees[d - 1].root}</span>
                 </button>
               ))}
             </div>
-            <button
-              type="button"
-              className="btn btn--ghost"
-              onClick={() => {
-                setBuildPicks([])
-                setFeedback(null)
-              }}
-            >
-              Reset
-            </button>
           </div>
         ) : null}
 
-        {step.id === 'find' ? (
+        {step.id === 'find' || step.id === 'play' ? (
           <div className="actions">
             <p className="target">
-              Alvo <strong>{targetChord.label}</strong>
-              <span>
-                {findTargetIndex + 1}/{progression.length}
-              </span>
+              Alvo{' '}
+              <strong>
+                {step.id === 'find' ? findTarget.label : playTarget.label}
+              </strong>
             </p>
-            <button type="button" className="btn" onClick={checkFind}>
-              Checar acorde
-            </button>
+            {step.id === 'play' ? (
+              <button
+                type="button"
+                className="btn btn--ghost"
+                onClick={() => void hearAll(false)}
+              >
+                Referência
+              </button>
+            ) : null}
             <button
               type="button"
-              className="btn btn--ghost"
-              onClick={() => setPressed(new Set())}
+              className="btn"
+              onClick={step.id === 'find' ? checkFind : checkPlay}
             >
-              Limpar
-            </button>
-          </div>
-        ) : null}
-
-        {step.id === 'play' ? (
-          <div className="actions">
-            <p className="target">
-              Agora <strong>{playTarget.label}</strong>
-              <span>
-                {playIndex + 1}/{progression.length}
-              </span>
-            </p>
-            <button
-              type="button"
-              className="btn btn--ghost"
-              onClick={() => void hearProgression(false)}
-            >
-              Referência
-            </button>
-            <button type="button" className="btn" onClick={checkPlay}>
               Checar
             </button>
             <button
@@ -453,7 +440,8 @@ export function LessonFlow() {
         ) : null}
 
         <div className="piano-wrap">
-          <PianoKeyboard
+          <InstrumentView
+            instrument={instrument}
             highlighted={highlighted}
             pressed={
               step.id === 'find' || step.id === 'play' ? pressed : new Set()
@@ -493,20 +481,4 @@ export function LessonFlow() {
       </section>
     </div>
   )
-}
-
-function defaultSafeGame(): GameState {
-  if (typeof window === 'undefined') {
-    return {
-      xp: 0,
-      combo: 0,
-      bestCombo: 0,
-      streakDays: 0,
-      lastPlayDate: null,
-      badges: [],
-      lessonsCleared: 0,
-      totalHits: 0,
-    }
-  }
-  return loadGame()
 }
