@@ -7,7 +7,15 @@
 - Branch de produção: `main`
 
 ## Domínio
-Apontar `harmusic.hipercube.ia.br` como custom domain no projeto Pages (CNAME para `harmusic.pages.dev` ou o target que o dashboard indicar).
+1. Custom domain no Pages: `harmusic.hipercube.ia.br` (já solicitado via API).
+2. DNS na zona `hipercube.ia.br` (token atual sem permissão DNS Edit):
+
+```text
+Type  Name       Target               Proxy
+CNAME harmusic   harmusic.pages.dev   Proxied
+```
+
+Sem esse CNAME a verificação fica `pending` / "CNAME record not set".
 
 ## Secrets no GitHub Actions
 | Secret | Uso |

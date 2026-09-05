@@ -8,6 +8,8 @@
 - [x] Pipeline pedagógico em 5 etapas
 - [x] Testes unitários de teoria
 - [x] Workflow Cloudflare Pages + scripts GitHub
+- [x] UI tech (HUD, motion, teclado jogável)
+- [x] Gamificação: XP, nível, combo, streak, badges
 
 ## Próximo
 - [ ] Seletor de tônico (C, G, F, D…)
@@ -15,6 +17,7 @@
 - [ ] Modo menor natural / harmônico
 - [ ] Ajuste fino de voicing (inversões)
 - [ ] Feedback sonoro de erro/acerto distinto
+- [ ] CNAME `harmusic.hipercube.ia.br` → `harmusic.pages.dev`
 
 ## Depois
 - [ ] Violão (diagrama de braço + shapes)
