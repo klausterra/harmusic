@@ -1,0 +1,294 @@
+.sell {
+  width: min(960px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 0;
+  padding-bottom: 2.5rem;
+}
+
+.sell__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 0 0.75rem;
+  animation: rise 0.45s ease both;
+}
+
+.sell__logo {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  background: linear-gradient(105deg, #eafff6, #5cff9d 55%, #00e6b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sell__hero {
+  min-height: min(78vh, 640px);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 2.5rem 0.5rem 3.5rem;
+  position: relative;
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.sell__hero::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset: 8% 5% auto;
+  height: 55%;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(0, 230, 184, 0.22), transparent 62%),
+    radial-gradient(ellipse at 80% 70%, rgba(92, 255, 157, 0.1), transparent 50%);
+  z-index: 0;
+  animation: sellGlow 8s ease-in-out infinite alternate;
+}
+
+.sell__hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sell__brand {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 14vw, 5.6rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+  background: linear-gradient(105deg, #eafff6 0%, #5cff9d 42%, #00e6b8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sell__headline {
+  margin: 0;
+  max-width: 16ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3.8vw, 1.85rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: #dceee6;
+  line-height: 1.25;
+}
+
+.sell__sub {
+  margin: 0;
+  max-width: 32rem;
+  color: #9eb0a8;
+  line-height: 1.55;
+  font-size: 1rem;
+}
+
+.sell__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.sell__cta .btn,
+.sell__plan .btn {
+  text-decoration: none;
+}
+
+.sell__method,
+.sell__plans {
+  padding: 2.75rem 0.35rem 1.5rem;
+  text-align: center;
+  display: grid;
+  gap: 0.85rem;
+  justify-items: center;
+  animation: rise 0.7s ease both;
+  animation-delay: 0.08s;
+}
+
+.sell__method h2,
+.sell__plans h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  letter-spacing: -0.04em;
+}
+
+.sell__section-lead {
+  margin: 0;
+  max-width: 28rem;
+  color: #9eb0a8;
+  line-height: 1.5;
+}
+
+.sell__steps {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  width: min(520px, 100%);
+  display: grid;
+  gap: 0.45rem;
+  text-align: left;
+}
+
+.sell__steps li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1px solid rgba(0, 255, 200, 0.1);
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  letter-spacing: -0.02em;
+  color: #d7ebe2;
+}
+
+.sell__steps em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  min-width: 1.6rem;
+}
+
+.sell__plan-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+  align-items: stretch;
+}
+
+.sell__plan {
+  position: relative;
+  display: grid;
+  gap: 0.65rem;
+  justify-items: start;
+  text-align: left;
+  padding: 1.35rem 1.25rem 1.25rem;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 255, 200, 0.14);
+  background:
+    linear-gradient(165deg, rgba(0, 230, 184, 0.06), transparent 50%),
+    rgba(7, 11, 16, 0.88);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.sell__plan:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 230, 184, 0.35);
+}
+
+.sell__plan.is-hot {
+  border-color: rgba(0, 230, 184, 0.45);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 230, 184, 0.12);
+  background:
+    linear-gradient(165deg, rgba(0, 230, 184, 0.14), transparent 48%),
+    rgba(6, 14, 12, 0.95);
+}
+
+.sell__plan-badge {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #04110c;
+  background: linear-gradient(135deg, #5cff9d, #00e6b8);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-weight: 700;
+}
+
+.sell__plan h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+.sell__price {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.sell__price strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 4vw, 2.35rem);
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+.sell__price span {
+  color: #8a9b93;
+  font-size: 0.9rem;
+}
+
+.sell__plan-blurb {
+  margin: 0 0 0.35rem;
+  color: #9eb0a8;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.sell__plan .btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.sell__fine {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  color: #6f8279;
+}
+
+.sell__foot {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
+  text-align: center;
+  color: #6f8279;
+  font-size: 0.78rem;
+}
+
+@keyframes sellGlow {
+  from {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@media (max-width: 720px) {
+  .sell__hero {
+    min-height: auto;
+    padding: 1.75rem 0.25rem 2.5rem;
+  }
+
+  .sell__plan-row {
+    grid-template-columns: 1fr;
+  }
+
+  .sell__steps li {
+    font-size: 0.95rem;
+  }
+}

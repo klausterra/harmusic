@@ -10,15 +10,16 @@ import { LessonPlayer } from './components/LessonPlayer'
 import {
   AdminPage,
   HomePage,
-  LandingPage,
   LessonsPage,
   PracticePage,
   ProgressPage,
 } from './pages/Pages'
+import { LandingPage, type PlanId } from './pages/Landing'
 import './components/LessonFlow.css'
 
 const CLEARED_KEY = 'harmusic.cleared.v1'
 const INSTRUMENT_KEY = 'harmusic.instrument.v1'
+const PLAN_INTENT_KEY = 'harmusic.planIntent.v1'
 
 function loadCleared(): string[] {
   try {
@@ -76,6 +77,10 @@ export default function App() {
       <div className="shell shell--landing">
         <LandingPage
           onLogin={() => void auth.signInWithGoogle()}
+          onSubscribe={(plan: PlanId) => {
+            localStorage.setItem(PLAN_INTENT_KEY, plan)
+            void auth.signInWithGoogle()
+          }}
           error={auth.error}
         />
       </div>
