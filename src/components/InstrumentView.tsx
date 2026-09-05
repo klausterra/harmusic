@@ -19,6 +19,7 @@ interface InstrumentViewProps {
   showLabels?: boolean
   interactive?: boolean
   onToggle?: (midi: number) => void
+  pianoRange?: { startMidi: number; keyCount: number }
 }
 
 function StyleToggle({
@@ -59,6 +60,7 @@ export function InstrumentView({
   showLabels,
   interactive,
   onToggle,
+  pianoRange,
 }: InstrumentViewProps) {
   return (
     <div className="inst-view" data-testid={`inst-view-${instrument}`}>
@@ -129,6 +131,8 @@ export function InstrumentView({
         />
       ) : (
         <PianoKeyboard
+          startMidi={pianoRange?.startMidi}
+          keyCount={pianoRange?.keyCount}
           highlighted={highlighted}
           pressed={pressed}
           showLabels={showLabels}

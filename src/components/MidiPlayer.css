@@ -1,0 +1,130 @@
+.midi-player {
+  gap: 1rem;
+}
+
+.midi-player__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.midi-player__sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.midi-player__upload {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.midi-player__upload input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.midi-player__examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.midi-player__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.92rem;
+  color: var(--dim, #9ab);
+}
+
+.midi-player__meta select {
+  margin-left: 0.35rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: inherit;
+  border-radius: 6px;
+  padding: 0.25rem 0.4rem;
+}
+
+.midi-player__warn {
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  background: rgba(255, 180, 60, 0.12);
+  border: 1px solid rgba(255, 180, 60, 0.35);
+  color: #ffd89a;
+  font-size: 0.88rem;
+}
+
+.midi-player__error {
+  color: #ff8a9a;
+  margin: 0;
+}
+
+.midi-player__modes,
+.midi-player__rates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.midi-player__modes button,
+.midi-player__rates button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: inherit;
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.midi-player__modes button.is-on,
+.midi-player__rates button.is-on {
+  background: rgba(0, 230, 184, 0.18);
+  border-color: rgba(0, 230, 184, 0.45);
+  color: #b8ffe8;
+}
+
+.midi-player__transport {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.midi-player__transport input[type='range'] {
+  width: 100%;
+  accent-color: #00e6b8;
+}
+
+.midi-player__time {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--dim, #9ab);
+  white-space: nowrap;
+}
+
+.midi-player__scoreline {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9fe9cf;
+}
+
+@media (max-width: 720px) {
+  .midi-player__transport {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .midi-player__transport input[type='range'] {
+    grid-column: 1 / -1;
+  }
+}

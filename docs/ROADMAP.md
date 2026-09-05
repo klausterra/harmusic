@@ -13,6 +13,7 @@
 - [x] Trilha estilo Duolingo (path + modo foco + vidas)
 - [x] Voz: afinador + karaoke harmônico (pitch em tempo real)
 - [x] PWA offline (manifest + service worker + install CTA)
+- [x] MIDI: upload + exemplos, play/highlight no instrumento, scrubber, 3 modos game
 
 ## Próximo
 - [ ] Seletor de tônico (C, G, F, D…)

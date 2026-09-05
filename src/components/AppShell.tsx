@@ -9,6 +9,7 @@ export type AppRoute =
   | { name: 'practice' }
   | { name: 'progress' }
   | { name: 'theory' }
+  | { name: 'midi' }
   | { name: 'admin' }
   | { name: 'play'; lessonId: string; instrument: InstrumentId }
   | { name: 'voice-tune'; nodeId: string }
@@ -65,6 +66,7 @@ export function AppShell({
                   ['home', 'Trilha'],
                   ['theory', 'Teoria'],
                   ['practice', 'Praticar'],
+                  ['midi', 'MIDI'],
                   ['progress', 'Progresso'],
                   ['lessons', 'Catálogo'],
                 ] as const
@@ -80,9 +82,11 @@ export function AppShell({
                         ? 'Conceitos: graus, progressões e o método'
                         : id === 'practice'
                           ? 'Revisar lições já liberadas'
-                          : id === 'progress'
-                            ? 'XP, streak e unidades concluídas'
-                            : 'Todas as lições (bloqueadas até liberar na trilha)'
+                          : id === 'midi'
+                            ? 'Enviar MIDI, ouvir no instrumento e jogar'
+                            : id === 'progress'
+                              ? 'XP, streak e unidades concluídas'
+                              : 'Todas as lições (bloqueadas até liberar na trilha)'
                   }
                   onClick={() => onNavigate({ name: id })}
                 >

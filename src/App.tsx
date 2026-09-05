@@ -8,6 +8,7 @@ import {
 import { flatPathNodes, type PathNode } from './catalog/path'
 import { AppShell, type AppRoute } from './components/AppShell'
 import { LessonPlayer } from './components/LessonPlayer'
+import { MidiPlayer } from './components/MidiPlayer'
 import { VoiceTunePlayer } from './components/VoiceTunePlayer'
 import { VoiceKaraokePlayer } from './components/VoiceKaraokePlayer'
 import {
@@ -188,6 +189,7 @@ export default function App() {
       ) : null}
       {route.name === 'progress' ? <ProgressPage cleared={cleared} /> : null}
       {route.name === 'theory' ? <TheoryPage /> : null}
+      {route.name === 'midi' ? <MidiPlayer instrument={instrument} /> : null}
       {route.name === 'admin' && auth.isAdmin ? <AdminPage /> : null}
     </>,
   )

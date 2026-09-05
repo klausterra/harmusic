@@ -101,6 +101,26 @@ function patchesFor(voice: SynthVoice, midi: number): VoicePatch[] {
   ]
 }
 
+let scheduleGen = 0
+const activeMasters = new Set<GainNode>()
+
+/** Bump generation so late-scheduled notes from a cancelled batch are ignored. */
+export function cancelScheduledNotes(): void {
+  scheduleGen += 1
+  for (const master of activeMasters) {
+    try {
+      const ctx = getAudioContext()
+      const now = ctx.currentTime
+      master.gain.cancelScheduledValues(now)
+      master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), now)
+      master.gain.exponentialRampToValueAtTime(0.0001, now + 0.03)
+    } catch {
+      /* ignore */
+    }
+  }
+  activeMasters.clear()
+}
+
 export function playMidiNotes(
   midiNotes: number[],
   durationSec = 0.9,
@@ -108,6 +128,7 @@ export function playMidiNotes(
   voice: SynthVoice = currentVoice,
 ): void {
   const ctx = getAudioContext()
+  const gen = scheduleGen
   const start = ctx.currentTime + when
   const master = ctx.createGain()
   const peak = voice === 'bass' ? 0.32 : 0.22
@@ -115,6 +136,7 @@ export function playMidiNotes(
   master.gain.exponentialRampToValueAtTime(peak, start + 0.03)
   master.gain.exponentialRampToValueAtTime(0.0001, start + durationSec)
   master.connect(ctx.destination)
+  activeMasters.add(master)
 
   const n = Math.max(midiNotes.length, 1)
   for (const midi of midiNotes) {
@@ -148,7 +170,18 @@ export function playMidiNotes(
       gain.connect(master)
       osc.start(start)
       osc.stop(start + durationSec + 0.08)
+      osc.onended = () => {
+        if (gen !== scheduleGen) return
+        activeMasters.delete(master)
+      }
     }
+  }
+
+  // If generation changed before start, mute immediately
+  if (gen !== scheduleGen) {
+    master.gain.cancelScheduledValues(ctx.currentTime)
+    master.gain.setValueAtTime(0.0001, ctx.currentTime)
+    activeMasters.delete(master)
   }
 }
 
