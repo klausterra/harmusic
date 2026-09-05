@@ -1,5 +1,7 @@
 .hud {
   width: min(920px, 100%);
+  max-width: 100%;
+  min-width: 0;
   display: grid;
   gap: 0.65rem;
   animation: hud-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -7,7 +9,7 @@
 
 .hud__row {
   display: grid;
-  grid-template-columns: auto 1fr auto auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   gap: 0.65rem;
   align-items: center;
   padding: 0.7rem 0.85rem;
@@ -17,6 +19,7 @@
     linear-gradient(135deg, rgba(0, 255, 200, 0.08), transparent 40%),
     rgba(8, 12, 18, 0.72);
   backdrop-filter: blur(12px);
+  min-width: 0;
 }
 
 .hud__label {

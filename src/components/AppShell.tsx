@@ -79,7 +79,7 @@ export function AppShell({
                     id === 'home'
                       ? 'Sua sequência de lições — toque Continuar'
                       : id === 'theory'
-                        ? 'Conceitos: graus, progressões e o método'
+                        ? 'Teoria musical e tutorial do sistema'
                         : id === 'practice'
                           ? 'Revisar lições já liberadas'
                           : id === 'midi'

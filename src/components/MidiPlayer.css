@@ -10,6 +10,13 @@
   gap: 1rem;
 }
 
+.midi-player__head .page__hero {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 .midi-player__sources {
   display: flex;
   flex-wrap: wrap;
@@ -96,9 +103,10 @@
 
 .midi-player__transport {
   display: grid;
-  grid-template-columns: auto auto 1fr auto;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
   gap: 0.65rem;
   align-items: center;
+  min-width: 0;
 }
 
 .midi-player__transport input[type='range'] {

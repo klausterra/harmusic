@@ -26,11 +26,17 @@ html,
 body,
 #root {
   min-height: 100%;
+  max-width: 100%;
+}
+
+html {
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: clip;
   background:
     radial-gradient(900px 420px at 85% -5%, rgba(0, 230, 184, 0.16), transparent 55%),
     radial-gradient(700px 380px at 5% 100%, rgba(92, 255, 157, 0.08), transparent 50%),
@@ -55,6 +61,9 @@ body::before {
   display: grid;
   place-items: start center;
   padding: 1.5rem 1rem 3rem;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 @media (max-width: 720px) {

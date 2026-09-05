@@ -1,10 +1,13 @@
 .shell {
   width: min(1100px, 100%);
+  max-width: 100%;
+  min-width: 0;
   margin: 0 auto;
   display: grid;
   gap: 1.15rem;
   min-height: calc(100vh - 3rem);
   padding-bottom: 1rem;
+  box-sizing: border-box;
 }
 
 .shell__top {
@@ -17,6 +20,8 @@
   border: 1px solid rgba(0, 255, 200, 0.1);
   background: rgba(8, 12, 16, 0.72);
   backdrop-filter: blur(14px);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .shell__brand {
@@ -38,6 +43,7 @@
   flex-wrap: wrap;
   gap: 0.2rem;
   flex: 1;
+  min-width: 0;
 }
 
 .shell__nav button {
@@ -101,6 +107,8 @@
   grid-template-columns: auto repeat(3, minmax(0, 1fr));
   gap: 0.45rem;
   align-items: center;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .shell__instruments-label {
@@ -129,6 +137,8 @@
   text-align: left;
   display: grid;
   gap: 0.15rem;
+  min-width: 0;
+  overflow: hidden;
   transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
 }
 
@@ -160,6 +170,8 @@
 
 .shell__main {
   flex: 1;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .shell__foot {
@@ -209,6 +221,16 @@
   justify-content: space-between;
 }
 
+@media (max-width: 960px) {
+  .shell__instruments {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .shell__instruments-label {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 720px) {
   .shell__top {
     padding: 0.55rem 0.65rem;
@@ -218,9 +240,11 @@
   .shell__nav {
     order: 3;
     width: 100%;
+    min-width: 0;
     gap: 0.15rem;
     flex-wrap: nowrap;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding-bottom: 0.1rem;
@@ -237,13 +261,14 @@
     white-space: nowrap;
   }
 
-  .shell__instruments {
-    grid-template-columns: auto repeat(3, minmax(0, 1fr));
+  .shell__instruments button {
+    padding: 0.55rem 0.45rem;
+    font-size: 0.82rem;
+    text-align: center;
   }
 
-  .shell__instruments button {
-    padding: 0.5rem 0.4rem;
-    font-size: 0.78rem;
+  .shell__instruments button small {
+    display: none;
   }
 
   .shell__user {
@@ -264,21 +289,9 @@
     display: none;
   }
 
-  .shell__instruments {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .shell__instruments-label {
-    grid-column: 1 / -1;
-  }
-
-  .shell__instruments button small {
-    display: none;
-  }
-
   .shell__instruments button {
-    text-align: center;
     padding: 0.55rem 0.35rem;
+    font-size: 0.78rem;
   }
 
   .shell__auth .btn--sm {

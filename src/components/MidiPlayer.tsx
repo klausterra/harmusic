@@ -46,9 +46,11 @@ import type {
   PlaybackRate,
 } from '../midi/types'
 import { GameHud } from './GameHud'
+import { Hint, TipBanner } from './Hint'
 import { InstrumentView } from './InstrumentView'
 import './MidiPlayer.css'
 import './LessonFlow.css'
+import '../pages/pages.css'
 
 interface MidiPlayerProps {
   instrument: InstrumentId
@@ -346,13 +348,21 @@ export function MidiPlayer({ instrument }: MidiPlayerProps) {
       <header className="midi-player__head">
         <div>
           <p className="page__kicker">MIDI</p>
-          <h1 className="page__hero">Toque o arquivo</h1>
+          <h1 className="page__hero">
+            Toque o arquivo
+            <Hint text="O instrumento do seletor acima define o visual e o input dos modos game." />
+          </h1>
           <p className="page__lead">
             Envie um .mid, ouça no {instrument} e treine nos modos game.
           </p>
         </div>
         <GameHud game={game} flashXp={flashXp} newBadge={newBadge} />
       </header>
+
+      <TipBanner
+        title="O que fazer aqui"
+        body="1) Abra um exemplo ou envie um .mid. 2) Escolha o modo (Ouvir, Rhythm, Follow, Karaoke). 3) Dê Play e siga as notas no instrumento selecionado."
+      />
 
       <div className="midi-player__sources">
         <label className="midi-player__upload btn">

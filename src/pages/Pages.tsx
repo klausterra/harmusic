@@ -40,8 +40,8 @@ export function HomePage({
           {xpIntoLevel(game.xp)}/100 XP
         </p>
         <TipBanner
-          title="Como usar"
-          body="Toque Continuar para a próxima lição. Em Teoria você lê os conceitos. Em cada instrumento escolha acorde/solo (teclado e violão) ou trastes (baixo)."
+          title="O que fazer aqui"
+          body="Toque Continuar (ou um nó liberado abaixo) para a próxima lição. Cadeado = ainda não desbloqueou. Escolha o instrumento no seletor acima antes de entrar."
         />
         {next ? (
           <button
@@ -132,11 +132,15 @@ export function LessonsPage({
   const list = LESSONS.filter((l) => l.instruments.includes(instrument))
   return (
     <section className="page">
-      <h1>Catálogo</h1>
+      <p className="page__kicker">catálogo</p>
+      <h1>Todas as lições</h1>
       <p className="page__lead">
-        Lições liberadas pela trilha · instrumento{' '}
-        <strong>{instrument}</strong>
+        Instrumento atual: <strong>{instrument}</strong>. Abra só as liberadas.
       </p>
+      <TipBanner
+        title="O que fazer aqui"
+        body="Escolha uma lição sem cadeado para revisar no instrumento selecionado. As bloqueadas abrem quando você avança na Trilha."
+      />
       <ul className="lesson-grid" data-testid="lesson-grid">
         {list.map((lesson) => {
           const open = unlocked.has(lesson.id) || cleared.includes(lesson.id)
@@ -189,10 +193,15 @@ export function PracticePage({
   )
   return (
     <section className="page">
+      <p className="page__kicker">revisão</p>
       <h1>Praticar</h1>
       <p className="page__lead">
-        Só drills já liberados na trilha — sem pular conteúdo.
+        Drills já liberados — sem pular conteúdo da trilha.
       </p>
+      <TipBanner
+        title="O que fazer aqui"
+        body="Toque um card para refazer a lição (escala, graus ou progressão). Use para aquecer ou consolidar o que já concluiu."
+      />
       {drills.length === 0 ? (
         <p className="shell__muted">Complete a primeira lição para liberar drills.</p>
       ) : (
@@ -219,11 +228,16 @@ export function ProgressPage({ cleared }: { cleared: string[] }) {
   const game = loadGame()
   return (
     <section className="page">
+      <p className="page__kicker">suas métricas</p>
       <h1>Progresso</h1>
       <p className="page__lead" data-testid="progress-count">
         {cleared.length} nó(s) na trilha · streak {game.streakDays}d · nível{' '}
         {levelFromXp(game.xp)}
       </p>
+      <TipBanner
+        title="O que fazer aqui"
+        body="Acompanhe XP, streak e quantos nós cada unidade já tem. Para subir de nível, volte à Trilha e conclua o próximo nó."
+      />
       <ul className="progress-stats">
         <li>
           <strong>{game.xp}</strong>
@@ -256,10 +270,15 @@ export function ProgressPage({ cleared }: { cleared: string[] }) {
 export function AdminPage() {
   return (
     <section className="page" data-testid="admin-page">
+      <p className="page__kicker">administração</p>
       <h1>Admin</h1>
       <p className="page__lead">
         Área restrita a <code>klausqterra@gmail.com</code>.
       </p>
+      <TipBanner
+        title="O que fazer aqui"
+        body="Consulta rápida de config (Firebase, auth, contagem de lições). Não há ações de aluno nesta tela."
+      />
       <ul className="admin-list">
         <li>Projeto Firebase: <code>empreenderia</code> (app Harmusic)</li>
         <li>Auth: Google apenas</li>
