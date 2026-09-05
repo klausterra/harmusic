@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { INSTRUMENTS, type InstrumentId } from '../catalog/lessons'
 import { useAuth } from '../auth/useAuth'
-import { Hint } from './Hint'
 import './AppShell.css'
 
 export type AppRoute =
@@ -136,13 +135,20 @@ export function AppShell({
                 <span className="shell__muted">…</span>
               ) : user ? (
                 <>
-                  <span className="shell__user" title={user.email ?? ''}>
+                  <span
+                    className="shell__user-name"
+                    title={user.email ?? user.displayName ?? ''}
+                  >
                     {user.displayName ?? user.email}
-                    {isAdmin ? <em>admin</em> : null}
                   </span>
+                  {isAdmin ? (
+                    <span className="shell__badge" title="Administrador">
+                      admin
+                    </span>
+                  ) : null}
                   <button
                     type="button"
-                    className="btn btn--ghost btn--sm"
+                    className="btn btn--ghost btn--sm shell__logout"
                     onClick={() => void signOut()}
                   >
                     Sair
@@ -167,7 +173,7 @@ export function AppShell({
         <div className="shell__instruments" role="group" aria-label="Instrumento">
           <div className="shell__instruments-label">
             <span>Seu instrumento</span>
-            <Hint text="Vale para lições e MIDI. Canto usa o microfone, não este seletor." />
+            <small>Lições e MIDI · canto usa o microfone</small>
           </div>
           {INSTRUMENTS.map((ins) => (
             <button

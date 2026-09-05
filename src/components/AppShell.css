@@ -96,30 +96,35 @@
 .shell__auth {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
-.shell__user {
+.shell__user-name {
   font-size: 0.8rem;
   color: #b7c7bf;
-  display: inline-flex;
-  gap: 0.35rem;
-  align-items: center;
-  max-width: 170px;
+  max-width: 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
 
-.shell__user em {
-  font-style: normal;
+.shell__badge {
+  flex-shrink: 0;
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
   border: 1px solid rgba(0, 230, 184, 0.35);
   border-radius: 999px;
-  padding: 0.1rem 0.35rem;
+  padding: 0.15rem 0.45rem;
+  line-height: 1.2;
+}
+
+.shell__logout {
+  flex-shrink: 0;
 }
 
 .shell__muted {
@@ -129,22 +134,33 @@
 
 .shell__instruments {
   display: grid;
-  grid-template-columns: auto repeat(3, minmax(0, 1fr));
-  gap: 0.45rem;
+  grid-template-columns: minmax(7.5rem, auto) repeat(3, minmax(0, 1fr));
+  gap: 0.55rem 0.65rem;
   align-items: center;
   min-width: 0;
   max-width: 100%;
 }
 
 .shell__instruments-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
+  display: grid;
+  gap: 0.2rem;
+  padding-right: 0.35rem;
+}
+
+.shell__instruments-label > span {
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #7f9088;
-  padding-right: 0.25rem;
+}
+
+.shell__instruments-label small {
+  font-size: 0.72rem;
+  line-height: 1.3;
+  color: #6d7f78;
+  letter-spacing: 0;
+  text-transform: none;
+  max-width: 11rem;
 }
 
 .shell__instruments button {
@@ -296,8 +312,8 @@
     display: none;
   }
 
-  .shell__user {
-    max-width: 90px;
+  .shell__user-name {
+    max-width: 6.5rem;
   }
 
   .shell--focus .shell__nav {
@@ -310,7 +326,7 @@
     font-size: 1.15rem;
   }
 
-  .shell__user {
+  .shell__user-name {
     display: none;
   }
 
