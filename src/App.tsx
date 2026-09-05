@@ -10,8 +10,8 @@ import { LessonPlayer } from './components/LessonPlayer'
 import {
   AdminPage,
   HomePage,
+  LandingPage,
   LessonsPage,
-  LoginGate,
   PracticePage,
   ProgressPage,
 } from './pages/Pages'
@@ -73,8 +73,8 @@ export default function App() {
 
   if (!auth.user) {
     return (
-      <div className="shell">
-        <LoginGate
+      <div className="shell shell--landing">
+        <LandingPage
           onLogin={() => void auth.signInWithGoogle()}
           error={auth.error}
         />

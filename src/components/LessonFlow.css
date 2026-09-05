@@ -365,10 +365,20 @@
 
 @media (max-width: 720px) {
   .steps {
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    overflow-x: auto;
+    gap: 0.35rem;
+    padding-bottom: 0.2rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .steps__item {
+    flex: 0 0 auto;
+    min-width: 4.6rem;
   }
 
   .steps__item:last-child {
-    grid-column: 1 / -1;
+    grid-column: auto;
   }
 }

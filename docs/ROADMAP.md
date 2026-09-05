@@ -20,8 +20,6 @@
 - [ ] CNAME `harmusic.hipercube.ia.br` → `harmusic.pages.dev`
 
 ## Depois
-- [ ] Violão (diagrama de braço + shapes)
-- [ ] Baixo (linhas de root/quinto)
-- [ ] PWA offline
+- [x] PWA offline (manifest + service worker + install CTA)
 - [ ] Conta / progresso na nuvem (opcional)
 - [ ] DNS `harmusic.hipercube.ia.br` → Pages

@@ -1,14 +1,130 @@
 .page {
   display: grid;
-  gap: 1rem;
+  gap: 1.1rem;
   animation: rise 0.45s ease both;
 }
 
 .page--home,
 .page--login {
-  padding: 2rem 0 1rem;
+  padding: 0.5rem 0 0.25rem;
   text-align: center;
   justify-items: center;
+}
+
+.landing {
+  width: min(720px, 100%);
+  margin: 0 auto;
+  min-height: calc(100vh - 3rem);
+  display: grid;
+  align-content: center;
+  gap: 2.25rem;
+  padding: 1.5rem 0.5rem 2rem;
+  text-align: center;
+  animation: rise 0.55s ease both;
+}
+
+.landing__hero {
+  display: grid;
+  gap: 0.85rem;
+  justify-items: center;
+}
+
+.landing__brand {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 10vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  background: linear-gradient(105deg, #eafff6 0%, #5cff9d 45%, #00e6b8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.landing__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 4.2vw, 1.85rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: #d7ebe2;
+}
+
+.landing__lead {
+  margin: 0;
+  max-width: 28rem;
+  color: #9eb0a8;
+  line-height: 1.55;
+  font-size: 0.98rem;
+}
+
+.landing__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: center;
+  margin-top: 0.35rem;
+  width: 100%;
+}
+
+.landing__cta .install-pwa {
+  width: auto;
+}
+
+.landing__flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.landing__flow li {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.65rem 0.35rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 255, 200, 0.1);
+  background: rgba(8, 12, 16, 0.55);
+}
+
+.landing__flow em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.landing__flow span {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: -0.02em;
+  color: #c8ddd4;
+}
+
+.shell--landing {
+  place-items: center;
+  min-height: calc(100vh - 3rem);
+}
+
+.page--login {
+  min-height: 70vh;
+  place-content: center;
+  gap: 1rem;
+  padding: 2rem 1rem;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 255, 200, 0.12);
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgba(0, 230, 184, 0.14), transparent 55%),
+    rgba(7, 11, 16, 0.78);
+}
+
+.page--login .page__hero,
+.page--login h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
 }
 
 .page__kicker {
@@ -23,15 +139,15 @@
 .page h1 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-size: clamp(1.85rem, 5vw, 3rem);
   letter-spacing: -0.04em;
 }
 
 .page__lead {
   margin: 0;
-  max-width: 36rem;
-  color: var(--muted);
-  line-height: 1.5;
+  max-width: 38rem;
+  color: #b4c4bc;
+  line-height: 1.55;
 }
 
 .page__cta {
@@ -39,6 +155,46 @@
   flex-wrap: wrap;
   gap: 0.55rem;
   justify-content: center;
+  margin-top: 0.35rem;
+}
+
+.home-features {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+  text-align: left;
+}
+
+.home-feature {
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 255, 200, 0.1);
+  background: rgba(8, 12, 16, 0.65);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.home-feature strong {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.home-feature span {
+  color: #9eb0a8;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.home-feature em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
 .lesson-grid {
@@ -46,39 +202,43 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 0.8rem;
 }
 
 .lesson-card {
   width: 100%;
   text-align: left;
   display: grid;
-  gap: 0.4rem;
-  padding: 1rem;
-  border-radius: 16px;
+  gap: 0.45rem;
+  padding: 1.05rem 1.05rem 0.95rem;
+  border-radius: 18px;
   border: 1px solid rgba(0, 255, 200, 0.12);
-  background: rgba(7, 11, 16, 0.72);
+  background:
+    linear-gradient(165deg, rgba(0, 230, 184, 0.07), transparent 42%),
+    rgba(7, 11, 16, 0.82);
   color: var(--ink);
   cursor: pointer;
-  transition: border-color 0.15s ease, transform 0.15s ease;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .lesson-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(0, 230, 184, 0.4);
+  transform: translateY(-3px);
+  border-color: rgba(0, 230, 184, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
 }
 
 .lesson-card strong {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: 1.08rem;
+  letter-spacing: -0.02em;
 }
 
 .lesson-card p {
   margin: 0;
-  color: var(--muted);
-  font-size: 0.85rem;
-  line-height: 1.4;
+  color: #a8b8b0;
+  font-size: 0.86rem;
+  line-height: 1.45;
 }
 
 .lesson-card__kind {
@@ -91,15 +251,32 @@
 .lesson-card__meta {
   display: flex;
   justify-content: space-between;
-  font-size: 0.72rem;
-  color: var(--dim);
+  align-items: center;
+  font-size: 0.74rem;
+  color: #8a9b93;
+  margin-top: 0.2rem;
+}
+
+.lesson-card__meta .xp {
+  color: #04110c;
+  background: linear-gradient(135deg, #5cff9d, #00e6b8);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-weight: 700;
+  font-size: 0.68rem;
+}
+
+.lesson-card.is-clear .xp {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(0, 230, 184, 0.35);
 }
 
 .cleared-list,
 .admin-list {
   margin: 0;
   padding-left: 1.1rem;
-  color: var(--muted);
+  color: #b4c4bc;
   display: grid;
   gap: 0.35rem;
 }
@@ -108,4 +285,22 @@
   color: var(--accent);
   font-family: var(--font-mono);
   font-size: 0.85em;
+}
+
+@media (max-width: 720px) {
+  .home-features {
+    grid-template-columns: 1fr;
+  }
+
+  .landing__flow {
+    grid-template-columns: repeat(5, minmax(3.2rem, 1fr));
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.25rem;
+  }
+
+  .landing {
+    gap: 1.75rem;
+    padding-top: 2rem;
+  }
 }

@@ -1,4 +1,4 @@
-import { INSTRUMENTS, LESSONS, displayNote, type InstrumentId } from '../catalog/lessons'
+import { INSTRUMENTS, LESSONS, type InstrumentId } from '../catalog/lessons'
 import { useAuth } from '../auth/useAuth'
 import './AppShell.css'
 
@@ -103,6 +103,7 @@ export function AppShell({
             onClick={() => onInstrument(ins.id)}
           >
             {ins.label}
+            <small>{ins.short}</small>
           </button>
         ))}
       </div>
@@ -111,8 +112,9 @@ export function AppShell({
 
       <footer className="shell__foot">
         <span>
-          {cleared.length}/{LESSONS.length} lições · tom base {displayNote('C')}
+          {cleared.length}/{LESSONS.length} lições · instrumento {instrument}
         </span>
+        <span>ver → ouvir → montar → encontrar → tocar</span>
       </footer>
     </div>
   )

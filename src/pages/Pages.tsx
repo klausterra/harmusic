@@ -4,6 +4,7 @@ import {
   type InstrumentId,
   type LessonDef,
 } from '../catalog/lessons'
+import { InstallPwaButton } from '../components/InstallPwa'
 import './pages.css'
 
 export function HomePage({
@@ -36,6 +37,7 @@ export function HomePage({
         >
           Continuar: {first.title}
         </button>
+        <InstallPwaButton className="btn btn--ghost" label="Instalar app" />
       </div>
     </section>
   )
@@ -155,7 +157,7 @@ export function AdminPage() {
   )
 }
 
-export function LoginGate({
+export function LandingPage({
   onLogin,
   error,
 }: {
@@ -163,21 +165,52 @@ export function LoginGate({
   error: string | null
 }) {
   return (
-    <section className="page page--login" data-testid="login-gate">
-      <p className="page__kicker">Harmusic</p>
-      <h1>Entre para treinar</h1>
-      <p className="page__lead">
-        Login com Google. Progresso e conquistas ficam na sua sessão.
-      </p>
-      <button
-        type="button"
-        className="btn"
-        data-testid="login-google-gate"
-        onClick={onLogin}
-      >
-        Continuar com Google
-      </button>
-      {error ? <p className="feedback feedback--bad">{error}</p> : null}
+    <section className="landing" data-testid="login-gate">
+      <div className="landing__hero">
+        <p className="landing__brand">Harmusic</p>
+        <h1 className="landing__title">Ouça. Monte. Toque.</h1>
+        <p className="landing__lead">
+          Escalas, graus e progressões em piano, violão e baixo — no celular ou
+          no desktop, com o app instalável.
+        </p>
+        <div className="landing__cta">
+          <button
+            type="button"
+            className="btn"
+            data-testid="login-google-gate"
+            onClick={onLogin}
+          >
+            Continuar com Google
+          </button>
+          <InstallPwaButton className="btn btn--ghost" label="Baixar app (PWA)" />
+        </div>
+        {error ? <p className="feedback feedback--bad">{error}</p> : null}
+      </div>
+      <ul className="landing__flow" aria-label="Fluxo de aprendizado">
+        <li>
+          <em>01</em>
+          <span>Ver</span>
+        </li>
+        <li>
+          <em>02</em>
+          <span>Ouvir</span>
+        </li>
+        <li>
+          <em>03</em>
+          <span>Montar</span>
+        </li>
+        <li>
+          <em>04</em>
+          <span>Encontrar</span>
+        </li>
+        <li>
+          <em>05</em>
+          <span>Tocar</span>
+        </li>
+      </ul>
     </section>
   )
 }
+
+/** @deprecated Use LandingPage — mantido para imports legados */
+export const LoginGate = LandingPage

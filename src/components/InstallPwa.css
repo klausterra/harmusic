@@ -1,0 +1,36 @@
+.install-pwa {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: center;
+  width: 100%;
+}
+
+.install-pwa__ios {
+  margin: 0;
+  max-width: 22rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 230, 184, 0.28);
+  background: rgba(0, 230, 184, 0.08);
+  color: #c8ddd4;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.install-pwa__ios strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.install-pwa__dismiss {
+  display: inline-block;
+  margin-left: 0.45rem;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+  padding: 0;
+}

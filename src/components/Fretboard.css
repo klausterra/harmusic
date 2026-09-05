@@ -1,13 +1,18 @@
 .fretboard {
   width: 100%;
-  max-width: 680px;
+  max-width: 720px;
   display: grid;
-  gap: 0.35rem;
-  padding: 0.75rem;
-  border-radius: 16px;
-  background: linear-gradient(180deg, #1a120c, #0e0a07);
-  border: 1px solid rgba(201, 160, 100, 0.18);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+  grid-template-columns: 2rem 1fr;
+  grid-template-rows: auto auto;
+  gap: 0.35rem 0.45rem;
+  padding: 0.9rem;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, #241910, #120d09 55%, #0c0907);
+  border: 1px solid rgba(201, 160, 100, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 170, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.45);
 }
 
 .fretboard__nut {
@@ -15,43 +20,44 @@
   gap: 2px;
   font-family: var(--font-mono);
   font-size: 0.65rem;
-  color: #c9a064;
+  color: #d4b07a;
+  align-content: start;
 }
 
 .fretboard--guitar .fretboard__nut {
-  grid-template-rows: repeat(6, 28px);
+  grid-template-rows: repeat(6, 30px);
 }
 
 .fretboard--bass .fretboard__nut {
-  grid-template-rows: repeat(4, 28px);
+  grid-template-rows: repeat(4, 30px);
 }
 
 .fretboard__nut span {
   display: grid;
   place-items: center;
-  width: 1.6rem;
-}
-
-.fretboard {
-  grid-template-columns: auto 1fr;
+  height: 30px;
 }
 
 .fretboard__grid {
   display: grid;
   gap: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent calc(100% / var(--frets, 8) - 1px),
-    rgba(255, 220, 160, 0.12) calc(100% / var(--frets, 8) - 1px),
-    rgba(255, 220, 160, 0.12) calc(100% / var(--frets, 8))
-  );
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 220, 160, 0.08),
+      rgba(255, 220, 160, 0.08) 1px,
+      transparent 1px,
+      transparent calc(100% / 8)
+    ),
+    linear-gradient(180deg, rgba(255, 200, 120, 0.05), transparent);
+  padding: 2px;
 }
 
 .fretboard__cell {
   border: 0;
   border-radius: 999px;
-  margin: 2px auto;
+  margin: 4px auto;
   width: 22px;
   height: 22px;
   background: transparent;
@@ -65,14 +71,18 @@
   cursor: pointer;
 }
 
+.fretboard.is-interactive .fretboard__cell:not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .fretboard__cell.is-lit {
   background: #5cff9d;
-  box-shadow: 0 0 12px rgba(0, 230, 184, 0.45);
+  box-shadow: 0 0 14px rgba(0, 230, 184, 0.5);
 }
 
 .fretboard__cell.is-pressed {
   background: #00e6b8;
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
 .fretboard__frets {
@@ -82,6 +92,33 @@
   grid-auto-columns: 1fr;
   font-family: var(--font-mono);
   font-size: 0.62rem;
-  color: #7a6a55;
+  color: #8a7355;
   text-align: center;
+}
+
+@media (max-width: 720px) {
+  .fretboard {
+    padding: 0.65rem;
+    overflow-x: auto;
+  }
+
+  .fretboard__cell {
+    width: 18px;
+    height: 18px;
+    font-size: 0.5rem;
+    margin: 3px auto;
+  }
+
+  .fretboard__nut {
+    font-size: 0.58rem;
+  }
+
+  .fretboard--guitar .fretboard__nut,
+  .fretboard--bass .fretboard__nut {
+    grid-template-rows: repeat(6, 26px);
+  }
+
+  .fretboard--bass .fretboard__nut {
+    grid-template-rows: repeat(4, 26px);
+  }
 }
