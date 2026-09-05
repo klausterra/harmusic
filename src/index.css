@@ -60,7 +60,7 @@ body::before {
 #root {
   display: grid;
   place-items: start center;
-  padding: 1.5rem 1rem 3rem;
+  padding: 1.75rem 1.25rem 3.25rem;
   width: 100%;
   min-width: 0;
   box-sizing: border-box;

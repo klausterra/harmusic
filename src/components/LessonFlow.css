@@ -297,6 +297,12 @@
   border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
+.btn--lg {
+  padding: 0.95rem 1.45rem;
+  font-size: 1.05rem;
+  border-radius: 14px;
+}
+
 .piano-wrap {
   width: 100%;
   display: flex;

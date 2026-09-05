@@ -1,0 +1,81 @@
+.onboard {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(2, 6, 8, 0.72);
+  backdrop-filter: blur(10px);
+  animation: onboard-fade 0.35s ease both;
+}
+
+.onboard__card {
+  width: min(440px, 100%);
+  display: grid;
+  gap: 1rem;
+  padding: 1.75rem 1.5rem 1.5rem;
+  border-radius: 22px;
+  border: 1px solid rgba(0, 230, 184, 0.28);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(0, 230, 184, 0.14), transparent 55%),
+    rgba(8, 14, 16, 0.96);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.onboard__kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.onboard__card h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 4vw, 1.85rem);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.onboard__card > p {
+  margin: 0;
+  color: #b7c9c0;
+  line-height: 1.6;
+  font-size: 1.02rem;
+}
+
+.onboard__dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.onboard__dots i {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.onboard__dots i.is-on {
+  width: 1.1rem;
+  background: var(--accent);
+}
+
+.onboard__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: flex-end;
+  margin-top: 0.35rem;
+}
+
+@keyframes onboard-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -180,3 +180,16 @@ export function unitProgress(
   const done = unit.nodes.filter((n) => cleared.includes(n.id)).length
   return { done, total }
 }
+
+export function voicePathNodes(): PathNode[] {
+  return flatPathNodes().filter(
+    (n) => n.kind === 'voice-tune' || n.kind === 'voice-karaoke',
+  )
+}
+
+export function nextVoiceNode(
+  cleared: readonly string[],
+): PathNode | undefined {
+  return voicePathNodes().find((n) => nodeStatus(n.id, cleared) === 'available')
+}
+

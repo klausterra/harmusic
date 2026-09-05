@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { INSTRUMENTS, type InstrumentId } from '../catalog/lessons'
 import { useAuth } from '../auth/useAuth'
 import { Hint } from './Hint'
@@ -5,6 +6,7 @@ import './AppShell.css'
 
 export type AppRoute =
   | { name: 'home' }
+  | { name: 'voice' }
   | { name: 'lessons' }
   | { name: 'practice' }
   | { name: 'progress' }
@@ -25,6 +27,19 @@ interface AppShellProps {
   children: React.ReactNode
 }
 
+const PRIMARY_NAV = [
+  { id: 'home' as const, label: 'Início', title: 'Propósito, próxima lição e trilha' },
+  { id: 'voice' as const, label: 'Canto', title: 'Afinador e karaoke de voz' },
+  { id: 'midi' as const, label: 'MIDI', title: 'Treinar com arquivos MIDI' },
+  { id: 'progress' as const, label: 'Progresso', title: 'XP e unidades' },
+]
+
+const MORE_NAV = [
+  { id: 'practice' as const, label: 'Praticar' },
+  { id: 'lessons' as const, label: 'Catálogo' },
+  { id: 'theory' as const, label: 'Como funciona' },
+]
+
 export function AppShell({
   route,
   instrument,
@@ -35,10 +50,13 @@ export function AppShell({
   children,
 }: AppShellProps) {
   const { user, isAdmin, signInWithGoogle, signOut, loading } = useAuth()
+  const [moreOpen, setMoreOpen] = useState(false)
   const focusMode =
     route.name === 'play' ||
     route.name === 'voice-tune' ||
     route.name === 'voice-karaoke'
+
+  const moreActive = MORE_NAV.some((n) => n.id === route.name)
 
   return (
     <div className={`shell${focusMode ? ' shell--focus' : ''}`}>
@@ -56,43 +74,53 @@ export function AppShell({
             className="btn btn--ghost btn--sm"
             onClick={() => onNavigate({ name: 'home' })}
           >
-            Sair da lição
+            Voltar ao início
           </button>
         ) : (
           <>
             <nav className="shell__nav" aria-label="Principal">
-              {(
-                [
-                  ['home', 'Trilha'],
-                  ['theory', 'Teoria'],
-                  ['practice', 'Praticar'],
-                  ['midi', 'MIDI'],
-                  ['progress', 'Progresso'],
-                  ['lessons', 'Catálogo'],
-                ] as const
-              ).map(([id, label]) => (
+              {PRIMARY_NAV.map((item) => (
                 <button
-                  key={id}
+                  key={item.id}
                   type="button"
-                  className={route.name === id ? 'is-active' : ''}
-                  title={
-                    id === 'home'
-                      ? 'Sua sequência de lições — toque Continuar'
-                      : id === 'theory'
-                        ? 'Teoria musical e tutorial do sistema'
-                        : id === 'practice'
-                          ? 'Revisar lições já liberadas'
-                          : id === 'midi'
-                            ? 'Enviar MIDI, ouvir no instrumento e jogar'
-                            : id === 'progress'
-                              ? 'XP, streak e unidades concluídas'
-                              : 'Todas as lições (bloqueadas até liberar na trilha)'
-                  }
-                  onClick={() => onNavigate({ name: id })}
+                  className={route.name === item.id ? 'is-active' : ''}
+                  title={item.title}
+                  onClick={() => {
+                    setMoreOpen(false)
+                    onNavigate({ name: item.id })
+                  }}
                 >
-                  {label}
+                  {item.label}
                 </button>
               ))}
+              <div className="shell__more">
+                <button
+                  type="button"
+                  className={moreActive || moreOpen ? 'is-active' : ''}
+                  aria-expanded={moreOpen}
+                  onClick={() => setMoreOpen((v) => !v)}
+                >
+                  Mais
+                </button>
+                {moreOpen ? (
+                  <div className="shell__more-panel" role="menu">
+                    {MORE_NAV.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        role="menuitem"
+                        className={route.name === item.id ? 'is-active' : ''}
+                        onClick={() => {
+                          setMoreOpen(false)
+                          onNavigate({ name: item.id })
+                        }}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
               {isAdmin ? (
                 <button
                   type="button"
@@ -138,8 +166,8 @@ export function AppShell({
       {!focusMode ? (
         <div className="shell__instruments" role="group" aria-label="Instrumento">
           <div className="shell__instruments-label">
-            <span>Instrumento</span>
-            <Hint text="Escolhe piano, violão ou baixo para as lições de instrumento. Não muda as lições de voz." />
+            <span>Seu instrumento</span>
+            <Hint text="Vale para lições e MIDI. Canto usa o microfone, não este seletor." />
           </div>
           {INSTRUMENTS.map((ins) => (
             <button
@@ -147,11 +175,10 @@ export function AppShell({
               type="button"
               className={instrument === ins.id ? 'is-active' : ''}
               data-testid={`instrument-${ins.id}`}
-              title={`Treinar no ${ins.label} (${ins.short})`}
+              title={`Treinar no ${ins.label}`}
               onClick={() => onInstrument(ins.id)}
             >
               {ins.label}
-              <small>{ins.short}</small>
             </button>
           ))}
         </div>
@@ -162,7 +189,7 @@ export function AppShell({
       {!focusMode ? (
         <footer className="shell__foot">
           <span>
-            {cleared.length}/{pathTotal} na trilha · {instrument}
+            {cleared.length}/{pathTotal} concluídos
           </span>
           <span>uma lição por vez</span>
         </footer>

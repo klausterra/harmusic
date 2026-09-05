@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest'
 import {
   flatPathNodes,
   nextAvailableNode,
+  nextVoiceNode,
   nodeStatus,
   unlockedLessons,
+  voicePathNodes,
 } from './path'
 
 describe('learning path', () => {
@@ -31,5 +33,14 @@ describe('learning path', () => {
     expect(ids[0]).toBe('c-maj-degrees')
     expect(ids).toContain('voice-tune-c')
     expect(ids).toContain('voice-karaoke-c1451')
+  })
+
+  it('exposes voice nodes for Canto hub', () => {
+    const voices = voicePathNodes()
+    expect(voices.every((n) => n.kind !== 'lesson')).toBe(true)
+    expect(nextVoiceNode([])).toBeUndefined()
+    expect(
+      nextVoiceNode(['c-maj-degrees', 'c-maj-scale', 'c-maj-1451'])?.id,
+    ).toBe('voice-tune-c')
   })
 })

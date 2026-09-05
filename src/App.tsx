@@ -5,10 +5,18 @@ import {
   type InstrumentId,
   type LessonDef,
 } from './catalog/lessons'
-import { flatPathNodes, type PathNode } from './catalog/path'
+import {
+  flatPathNodes,
+  nextAvailableNode,
+  type PathNode,
+} from './catalog/path'
 import { AppShell, type AppRoute } from './components/AppShell'
 import { LessonPlayer } from './components/LessonPlayer'
 import { MidiPlayer } from './components/MidiPlayer'
+import {
+  Onboarding,
+  shouldShowOnboarding,
+} from './components/Onboarding'
 import { VoiceTunePlayer } from './components/VoiceTunePlayer'
 import { VoiceKaraokePlayer } from './components/VoiceKaraokePlayer'
 import {
@@ -17,6 +25,7 @@ import {
   LessonsPage,
   PracticePage,
   ProgressPage,
+  VoicePage,
 } from './pages/Pages'
 import { TheoryPage } from './pages/Theory'
 import { LandingPage, type PlanId } from './pages/Landing'
@@ -45,11 +54,18 @@ export default function App() {
       : 'piano'
   })
   const [cleared, setCleared] = useState<string[]>(() => loadCleared())
+  const [showOnboarding, setShowOnboarding] = useState(false)
   const pathTotal = flatPathNodes().length
 
   useEffect(() => {
     localStorage.setItem(INSTRUMENT_KEY, instrument)
   }, [instrument])
+
+  useEffect(() => {
+    if (auth.user && shouldShowOnboarding()) {
+      setShowOnboarding(true)
+    }
+  }, [auth.user])
 
   useEffect(() => {
     if (route.name === 'admin' && !auth.isAdmin && !auth.loading) {
@@ -98,6 +114,15 @@ export default function App() {
       onNavigate={setRoute}
       onInstrument={setInstrument}
     >
+      {showOnboarding ? (
+        <Onboarding
+          onDone={() => setShowOnboarding(false)}
+          onStart={() => {
+            const next = nextAvailableNode(cleared)
+            if (next) openNode(next)
+          }}
+        />
+      ) : null}
       {children}
     </AppShell>
   )
@@ -147,7 +172,7 @@ export default function App() {
       <VoiceTunePlayer
         nodeId={route.nodeId}
         tonicLessonId={tonicLessonId}
-        onExit={() => setRoute({ name: 'home' })}
+        onExit={() => setRoute({ name: 'voice' })}
         onCleared={markCleared}
       />,
     )
@@ -158,7 +183,7 @@ export default function App() {
       <VoiceKaraokePlayer
         nodeId={route.nodeId}
         lessonId={route.lessonId}
-        onExit={() => setRoute({ name: 'home' })}
+        onExit={() => setRoute({ name: 'voice' })}
         onCleared={markCleared}
       />,
     )
@@ -171,7 +196,11 @@ export default function App() {
           instrument={instrument}
           cleared={cleared}
           onOpenNode={openNode}
+          onNavigate={setRoute}
         />
+      ) : null}
+      {route.name === 'voice' ? (
+        <VoicePage cleared={cleared} onOpenNode={openNode} />
       ) : null}
       {route.name === 'lessons' ? (
         <LessonsPage

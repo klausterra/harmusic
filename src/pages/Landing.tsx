@@ -48,10 +48,10 @@ export function LandingPage({
 
       <section className="sell__hero" aria-label="Apresentação">
         <p className="sell__brand">Harmusic</p>
-        <h1 className="sell__headline">Harmonia que você toca de verdade.</h1>
+        <h1 className="sell__headline">Aprenda harmonia tocando — e cantando.</h1>
         <p className="sell__sub">
-          Assine e treine escalas, graus e progressões no piano, violão e baixo
-          — no fluxo ver → ouvir → montar → encontrar → tocar.
+          Lições no piano, violão ou baixo, treino de voz e prática com MIDI.
+          Fluxo claro: ver → ouvir → montar → encontrar → tocar.
         </p>
         <div className="sell__cta">
           <a className="btn" href="#planos" data-testid="cta-subscribe">
